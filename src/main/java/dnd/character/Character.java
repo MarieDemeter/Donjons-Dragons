@@ -6,8 +6,8 @@ import java.util.Scanner;
 public abstract class Character {
     private String name;
     private char image = 'A';
-    private int heal;
-    private int maxHeal;
+    private int life;
+    private int maxLife;
     private int strength;
     private int maxStrength;
     private Weapon weapon ;
@@ -20,15 +20,15 @@ public abstract class Character {
 
     /**
      * Constructor of a character, could be a Mage or a Warrior
-     * @param heal The default value of the heal of the character at the start of the game
-     * @param maxHeal The default value of the max heal of the character for the game
+     * @param life The default value of the life of the character at the start of the game
+     * @param maxLife The default value of the max life of the character for the game
      * @param strength The default value of the strength of the character at the start of the game
-     * @param maxStrength The default value of the max heal of the character for the game
+     * @param maxStrength The default value of the max strength of the character for the game
      */
-    public Character(int heal, int maxHeal, int strength, int maxStrength){
-        this.heal = heal;
+    public Character(int life, int maxLife, int strength, int maxStrength){
+        this.life = life;
         this.strength = strength;
-        this.maxHeal = maxHeal;
+        this.maxLife = maxLife;
         this.maxStrength = maxStrength;
     }
 
@@ -61,18 +61,18 @@ public abstract class Character {
         this.image = image;
     }
     /**
-     * Getter of maxheal (get the maxheal of the character)
-     * @return The current maxheal of the character
+     * Getter of maxlife (get the maxlife of the character)
+     * @return The current maxlife of the character
      */
-    public int getMaxHeal() {
-        return maxHeal;
+    public int getMaxLife() {
+        return maxLife;
     }
     /**
-     * Setter of maxheal (set the value of the maxheal of the character)
-     * @param maxHeal the maxheal define by the defaults values of the character sheet
+     * Setter of maxlife (set the value of the maxlife of the character)
+     * @param maxLife the maxlife define by the defaults values of the character sheet
      */
-    public void setMaxHeal(int maxHeal) {
-        this.maxHeal = maxHeal;
+    public void setMaxLife(int maxLife) {
+        this.maxLife = maxLife;
     }
     /**
      * Getter of maxstrength (get the maxstrength of the character)
@@ -89,18 +89,18 @@ public abstract class Character {
         this.maxStrength = maxStrength;
     }
     /**
-     * Getter of heal (get the heal of the character)
-     * @return The current heal of the character
+     * Getter of life (get the life of the character)
+     * @return The current life of the character
      */
-    public int getHeal() {
-        return heal;
+    public int getLife() {
+        return life;
     }
     /**
-     * Setter of heal (set the value of the heal of the character)
-     * @param heal the default heal given at the start by the defaults values of the character sheet
+     * Setter of life (set the value of the life of the character)
+     * @param life the default life given at the start by the defaults values of the character sheet
      */
-    public void setHeal(int heal) {
-        this.heal = heal;
+    public void setLife(int life) {
+        this.life = life;
     }
     /**
      * Getter of strength (get the strength of the character)
@@ -160,7 +160,7 @@ public abstract class Character {
     @Override
     public String toString() {
         return "Bonjour " + this.name + "," + "\n" +
-                "tu as actuellement " + this.heal + " point de vie, mais tu vas pouvoir en obtenir " + this.maxHeal + " au maximum" + "\n" +
+                "tu as actuellement " + this.life + " point de vie, mais tu vas pouvoir en obtenir " + this.maxLife + " au maximum" + "\n" +
                 "Concernant ta force, elle est actuellement de " + this.strength + " mais bientôt tu atteindras ta force maximale de " + this.maxStrength;
     }
 }
