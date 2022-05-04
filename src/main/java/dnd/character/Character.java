@@ -176,8 +176,8 @@ public abstract class Character {
         System.out.println("Quel sera l'arme de votre personnage ? ");
         weaponOfCharacterChosen = chooseWeapon.nextLine();
 
-        if (weaponOfCharacterChosen.equals("sword") || weaponOfCharacterChosen.equals("club")) {
-
+        if(weaponOfCharacterChosen.equals("sword") || weaponOfCharacterChosen.equals("club")) {
+        //    weapon = new Sword;
         } else {
             System.out.println("Ceci n'est pas une arme définie !");
         }
@@ -185,10 +185,10 @@ public abstract class Character {
         return weaponOfCharacterChosen;
     }
 
-    //@Override
-    public String toString(String type) {
-        return "Bonjour " + type + " " + this.name + "," + "\n" +
-                "Tu as actuellement " + this.life + " point de vie, mais tu vas pouvoir en obtenir " + this.maxLife + " au maximum." + "\n" +
-                "Concernant ta force, elle est actuellement de " + this.strength + " mais bientôt tu atteindras ta force maximale de " + this.maxStrength;
+    @Override
+    public String toString() {
+        return "Bonjour " + this.getClass().getSimpleName() + " " + this.name + "," + "\n" +
+                "Tu as actuellement " + this.life + " points de vie, mais tu vas pouvoir en obtenir " + this.maxLife + " au maximum." + "\n" +
+                "Concernant ta force, elle est actuellement de " + this.strength + " mais en jouant tu atteindras peut-être ta force maximale de " + this.maxStrength + ".";
     }
 }
