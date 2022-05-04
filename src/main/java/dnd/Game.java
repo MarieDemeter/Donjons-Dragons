@@ -9,7 +9,7 @@ import java.util.Scanner;
 public class Game {
 
     public static void main(String[] args) {
-        String typeOfCharacterChosen;
+        String typeOfCharacterChosen=null;
         Character character = null;
 
         while (character == null) {
@@ -27,7 +27,7 @@ public class Game {
             }
         }
         character.setName(character.chooseName());
-        System.out.println(character.toString());
+        System.out.println(character.toString(typeOfCharacterChosen));
     }
 
 
