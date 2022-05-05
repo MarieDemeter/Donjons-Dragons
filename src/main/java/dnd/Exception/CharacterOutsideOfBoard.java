@@ -1,4 +1,4 @@
-package dnd;
+package dnd.Exception;
 
 public class CharacterOutsideOfBoard extends Exception{
 

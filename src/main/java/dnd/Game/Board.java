@@ -1,8 +1,4 @@
-package dnd;
-
-import dnd.Cell;
-
-import java.util.Arrays;
+package dnd.Game;
 
 public class Board {
     Cell[] board = new Cell[64];

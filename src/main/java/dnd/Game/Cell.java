@@ -1,4 +1,4 @@
-package dnd;
+package dnd.Game;
 
 public class Cell {
     int number;

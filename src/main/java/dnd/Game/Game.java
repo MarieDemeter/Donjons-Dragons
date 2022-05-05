@@ -1,5 +1,6 @@
-package dnd;
+package dnd.Game;
 
+import dnd.Exception.CharacterOutsideOfBoard;
 import dnd.character.Character;
 import dnd.character.Mage;
 import dnd.character.Warrior;
