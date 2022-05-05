@@ -87,13 +87,22 @@ public class Game {
         System.out.println("Nous allons commencer :" + "\n");
         Board board = new Board();
         Dice dice = new Dice();
+        Game game = new Game();
+        String rollDice = "";
         int playerPosition = 0;
 
 
         while (playerPosition < board.getBoard().length) {
-            int valueOfDice = dice.rollDice();
-            playerPosition += valueOfDice;
-            System.out.println("Félicitation tu es maintenant sur la case " + playerPosition + "\n");
+            System.out.println("Appuyez sur une touche pour lancer le dé ou taper q pour quitter");
+            rollDice = game.input();
+
+            if (rollDice.equals("q")) {
+                game.quitGame();
+            } else {
+                int valueOfDice = dice.rollDice();
+                playerPosition += valueOfDice;
+                System.out.println("Vous êtes donc sur la case " + playerPosition + "\n");
+            }
         }
 
         System.out.println("Voulez-vous recommencer une partie ? (o ou n)");
