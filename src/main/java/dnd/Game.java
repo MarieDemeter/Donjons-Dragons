@@ -7,73 +7,92 @@ import dnd.character.Warrior;
 import java.util.Scanner;
 
 public class Game {
+    Dice dice = new Dice();
+    Board board = new Board();
+    Character character = this.createCharacter();
 
     public Game() {
     }
 
+    /**
+     * Start the programme
+     *
+     * @param args String[]
+     */
     public static void main(String[] args) {
         Game game = new Game();
-        Character character = game.createCharacter();
-        game.makeMenuchoice(character);
+        game.makeMenuchoice();
     }
 
-    public void quitGame() {
+    /**
+     * Use to quit the game and stop the programme
+     */
+    private void quitGame() {
         System.out.println("A bientôt !");
         System.exit(0);
     }
 
-    public String printMenu() {
-        String playerChoice;
-        Game game = new Game();
+    /**
+     * Function which print the menu to start the game
+     *
+     * @return String playerChoice
+     */
+    private String printMenu() {
         System.out.println("Pour commencer à jouer, taper o");
         System.out.println("Pour changer votre héro, taper m");
         System.out.println("Pour voir les caractéristiques de votre héro, taper c");
         System.out.println("Pour quitter le jeu, taper q");
-        playerChoice = game.input();
-        return playerChoice;
+        return this.input();
     }
 
-    public Character createCharacter() {
+    /**
+     * Create a new character (choose name and type)
+     *
+     * @return Character character create by the player
+     */
+    private Character createCharacter() {
         String typeOfCharacterChosen;
         Character character = null;
-        Game game = new Game();
 
         while (character == null) {
             System.out.println("Quel personnage voulez-vous jouer (guerrier ou mage) ?");
-            typeOfCharacterChosen = game.input();
+            typeOfCharacterChosen = this.input();
 
             if (typeOfCharacterChosen.equals("guerrier")) {
                 character = new Warrior();
             } else if (typeOfCharacterChosen.equals("mage")) {
                 character = new Mage();
             } else if (typeOfCharacterChosen.equals("exit")) {
-                game.quitGame();
+                this.quitGame();
             }
         }
         character.setName(character.chooseName());
         return character;
     }
 
-    public void makeMenuchoice(Character character) {
+    /**
+     * Control the choice of the player on the main menu
+     *
+     */
+    private void makeMenuchoice() {
         String isItValid = "";
-        Game game = new Game();
 
         while (!isItValid.equals("o")) {
-            isItValid = game.printMenu();
+            isItValid = this.printMenu();
             switch (isItValid) {
                 case "o":
-                    playGame(character);
+                    playGame();
                     break;
                 case "c":
                     isItValid = "";
-                    System.out.println(character);
+                    System.out.println(this.character);
                     break;
                 case "m":
-                    character = createCharacter();
+                    this.character = createCharacter();
                     isItValid = "";
                     break;
                 case "q":
-                    game.quitGame();
+                    this.quitGame();
                     break;
                 default:
                     System.out.println("Je n'ai pas compris !");
@@ -83,44 +102,48 @@ public class Game {
         }
     }
 
-    public void playGame(Character character) {
+    /**
+     * Start and play the game
+     *
+     */
+    private void playGame() {
         System.out.println("Nous allons commencer :" + "\n");
-        Board board = new Board();
-        Dice dice = new Dice();
-        Game game = new Game();
         String rollDice = "";
         int playerPosition = 0;
 
 
-        while (playerPosition < board.getBoard().length) {
+        while (playerPosition < this.board.getBoard().length) {
             System.out.println("Appuyez sur une touche pour lancer le dé ou taper q pour quitter");
-            rollDice = game.input();
+            rollDice = this.input();
 
             if (rollDice.equals("q")) {
-                game.quitGame();
+                this.quitGame();
             } else {
-                int valueOfDice = dice.rollDice();
+                int valueOfDice = this.dice.rollDice();
                 playerPosition += valueOfDice;
                 System.out.println("Vous êtes donc sur la case " + playerPosition + "\n");
             }
         }
 
         System.out.println("Voulez-vous recommencer une partie ? (o ou n)");
-        playAgain(character);
+        playAgain();
     }
 
-    public void playAgain(Character character) {
+    /**
+     * Control the choice of the player to know if he wants to play again or stop the game
+     *
+     */
+    private void playAgain() {
         String playAgain = "";
-        Game game = new Game();
 
         while (!playAgain.equals("o") && !playAgain.equals("n")) {
-            playAgain = game.input();
+            playAgain = this.input();
             switch (playAgain) {
                 case "o":
-                    sameCharacterOrNot(character);
+                    this.sameCharacterOrNot();
                     break;
                 case "n":
-                    game.quitGame();
+                    this.quitGame();
                     break;
                 default:
                     System.out.println("Veuillez saisir une réponse correcte");
@@ -129,20 +152,23 @@ public class Game {
         }
     }
 
-    public void sameCharacterOrNot(Character character) {
+    /**
+     * Control if the player wants to play again with the same character or not
+     *
+     */
+    private void sameCharacterOrNot() {
         System.out.println("Voulez-vous garder le même personnage ? (o ou n)");
         String sameCharacter = "";
-        Game game = new Game();
 
         while (!sameCharacter.equals("o") && !sameCharacter.equals("n")) {
-            sameCharacter = game.input();
+            sameCharacter = this.input();
             switch (sameCharacter) {
                 case "o":
-                    playGame(character);
+                    this.playGame();
                     break;
                 case "n":
-                    Character newCharacter = createCharacter();
-                    makeMenuchoice(newCharacter);
+                    this.character = createCharacter();
+                    this.makeMenuchoice();
                     break;
                 default:
                     System.out.println("Veuillez saisir une réponse correcte");
@@ -151,7 +177,12 @@ public class Game {
         }
     }
 
-    public String input() {
+    /**
+     * Return the string given by the player
+     *
+     * @return String value of the input of the player
+     */
+    private String input() {
         Scanner input = new Scanner(System.in);
         return input.nextLine();
     }
