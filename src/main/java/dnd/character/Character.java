@@ -161,7 +161,7 @@ public abstract class Character {
     }
 
 
-    public static String chooseName() {
+    public String chooseName() {
         String nameOfCharacterChosen;
         Scanner chooseName = new Scanner(System.in);
         System.out.println("Quel sera le nom de votre personnage ? ");
@@ -169,7 +169,7 @@ public abstract class Character {
         return nameOfCharacterChosen;
     }
 
-    public static String chooseWeapon() {
+    public String chooseWeapon() {
         String weaponOfCharacterChosen;
         Weapon weapon;
         Scanner chooseWeapon = new Scanner(System.in);
@@ -181,7 +181,6 @@ public abstract class Character {
         } else {
             System.out.println("Ceci n'est pas une arme définie !");
         }
-
         return weaponOfCharacterChosen;
     }
 
@@ -189,6 +188,6 @@ public abstract class Character {
     public String toString() {
         return "Bonjour " + this.getClass().getSimpleName() + " " + this.name + "," + "\n" +
                 "Tu as actuellement " + this.life + " points de vie, mais tu vas pouvoir en obtenir " + this.maxLife + " au maximum." + "\n" +
-                "Concernant ta force, elle est actuellement de " + this.strength + " mais en jouant tu atteindras peut-être ta force maximale de " + this.maxStrength + ".";
+                "Concernant ta force, elle est actuellement de " + this.strength + " mais en jouant tu atteindras peut-être ta force maximale de " + this.maxStrength + "."+ "\n";
     }
 }
