@@ -72,7 +72,6 @@ public class Game {
 
     /**
      * Control the choice of the player on the main menu
-     *
      */
     private void makeMenuchoice() {
         String isItValid = "";
@@ -104,7 +103,6 @@ public class Game {
 
     /**
      * Start and play the game
-     *
      */
     private void playGame() {
         System.out.println("Nous allons commencer :" + "\n");
@@ -121,7 +119,15 @@ public class Game {
             } else {
                 int valueOfDice = this.dice.rollDice();
                 playerPosition += valueOfDice;
-                System.out.println("Vous êtes donc sur la case " + playerPosition + "\n");
+                try {
+                    if (playerPosition < this.board.getBoard().length) {
+                        System.out.println("Vous êtes donc sur la case " + playerPosition + "\n");
+                    } else {
+                        throw new CharacterOutsideOfBoard();
+                    }
+                } catch (CharacterOutsideOfBoard e) {
+                    System.out.println(e);
+                }
             }
         }
 
@@ -131,7 +137,6 @@ public class Game {
 
     /**
      * Control the choice of the player to know if he wants to play again or stop the game
-     *
      */
     private void playAgain() {
         String playAgain = "";
@@ -154,7 +159,6 @@ public class Game {
 
     /**
      * Control if the player wants to play again with the same character or not
-     *
      */
     private void sameCharacterOrNot() {
         System.out.println("Voulez-vous garder le même personnage ? (o ou n)");
