@@ -8,11 +8,14 @@ import dnd.character.Warrior;
 import java.util.Scanner;
 
 public class Game {
-    Dice dice = new Dice();
-    Board board = new Board();
-    Character character = this.createCharacter();
+    private Dice dice;
+    private Board board;
+    private Character character;
 
     public Game() {
+        dice = new Dice();
+        board = new Board();
+        character = this.createCharacter();
     }
 
     /**
@@ -74,7 +77,7 @@ public class Game {
     /**
      * Control the choice of the player on the main menu
      */
-    private void makeMenuchoice() {
+    public void makeMenuchoice() {
         String isItValid = "";
 
         while (!isItValid.equals("o")) {
@@ -106,12 +109,11 @@ public class Game {
      * Start and play the game
      */
     private void playGame() {
-        System.out.println("Nous allons commencer :" + "\n");
+        System.out.println("Nous allons commencer, tu commences sur la case 1 :" + "\n");
         String rollDice = "";
         int playerPosition = 0;
 
-
-        while (playerPosition < this.board.getBoard().length) {
+        while (true) {
             System.out.println("Appuyez sur une touche pour lancer le dé ou taper q pour quitter");
             rollDice = this.input();
 
@@ -121,13 +123,17 @@ public class Game {
                 int valueOfDice = this.dice.rollDice();
                 playerPosition += valueOfDice;
                 try {
-                    if (playerPosition < this.board.getBoard().length) {
+                    Cell cellPosition = this.board.getCell(playerPosition);
+                    System.out.println("Vous êtes donc sur la case " + cellPosition.number + "\n");
+                    //x.launchEvent(character);
+                    /*if (playerPosition < this.board.getBoard().length) {
                         System.out.println("Vous êtes donc sur la case " + playerPosition + "\n");
                     } else {
                         throw new CharacterOutsideOfBoard();
-                    }
+                    }*/
                 } catch (CharacterOutsideOfBoard e) {
                     System.out.println(e);
+                    break;
                 }
             }
         }
@@ -173,6 +179,7 @@ public class Game {
                     break;
                 case "n":
                     this.character = createCharacter();
+                    this.board = new Board();
                     this.makeMenuchoice();
                     break;
                 default:
