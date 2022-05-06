@@ -60,7 +60,7 @@ public class Game {
             System.out.println("Quel personnage voulez-vous jouer (Warrior ou Mage) ?");
             typeOfCharacterChosen = this.input();
             try {
-                Class typeClass = Class.forName("dnd.character." + typeOfCharacterChosen);
+                Class typeClass = Class.forName("dnd.character.heros." + typeOfCharacterChosen);
                 hero = (Hero) typeClass.getDeclaredConstructor().newInstance();
             } catch (Exception e) {
                 System.out.println("Ce type de personnage n'existe pas.");

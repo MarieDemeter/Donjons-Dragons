@@ -4,7 +4,7 @@ public class Cell {
     int number;
 
     public Cell(int i) {
-        this.number = i+1;
+        this.setNumber(i+1);
     }
 
     public int getNumber() {
