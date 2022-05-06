@@ -1,10 +1,10 @@
-package dnd.attack;
+package dnd.equipement;
 
-public class Attack {
+public class Equipement {
     private String name;
     private int strength;
 
-    public Attack(String name, int strength) {
+    public Equipement(String name, int strength) {
         this.name = name;
         this.strength = strength;
     }
