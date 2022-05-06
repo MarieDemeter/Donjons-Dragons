@@ -1,19 +1,19 @@
 package dnd.game;
 
+import dnd.character.Hero;
 import dnd.exception.CharacterOutsideOfBoard;
-import dnd.character.Character;
 
 import java.util.Scanner;
 
 public class Game {
     private Dice dice;
     private Board board;
-    private Character character;
+    private Hero hero;
 
     public Game() {
         dice = new Dice();
         board = new Board();
-        character = this.createCharacter();
+        hero = this.createCharacter();
     }
 
     /**
@@ -52,16 +52,16 @@ public class Game {
      *
      * @return Character character create by the player
      */
-    private Character createCharacter() {
+    private Hero createCharacter() {
         String typeOfCharacterChosen = "";
-        Character character = null;
+        Hero hero = null;
 
-        while (character == null) {
+        while (hero == null) {
             System.out.println("Quel personnage voulez-vous jouer (Warrior ou Mage) ?");
             typeOfCharacterChosen = this.input();
             try {
                 Class typeClass = Class.forName("dnd.character." + typeOfCharacterChosen);
-                character = (Character) typeClass.getDeclaredConstructor().newInstance();
+                hero = (Hero) typeClass.getDeclaredConstructor().newInstance();
             } catch (Exception e) {
                 System.out.println("Ce type de personnage n'existe pas.");
             }
@@ -73,8 +73,8 @@ public class Game {
                 this.quitGame();
             }*/
         }
-        character.setName(character.chooseName());
-        return character;
+        hero.setName(hero.chooseName());
+        return hero;
     }
 
     /**
@@ -91,10 +91,10 @@ public class Game {
                     break;
                 case "c":
                     isItValid = "";
-                    System.out.println(this.character);
+                    System.out.println(this.hero);
                     break;
                 case "m":
-                    this.character = createCharacter();
+                    this.hero = createCharacter();
                     isItValid = "";
                     break;
                 case "q":
@@ -181,7 +181,7 @@ public class Game {
                     this.playGame();
                     break;
                 case "n":
-                    this.character = createCharacter();
+                    this.hero = createCharacter();
                     this.board = new Board();
                     this.makeMenuchoice();
                     break;

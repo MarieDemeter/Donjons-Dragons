@@ -1,8 +1,8 @@
 package dnd.character.heros;
 
-import dnd.character.Character;
+import dnd.character.Hero;
 
-public class Warrior extends Character {
+public class Warrior extends Hero {
 
 
     /**

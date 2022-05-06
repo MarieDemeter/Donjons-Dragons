@@ -1,8 +1,8 @@
 package dnd.character.heros;
 
-import dnd.character.Character;
+import dnd.character.Hero;
 
-public class Mage extends Character {
+public class Mage extends Hero {
 
     /**
      * Constructor of a character, could be a Mage or a Warrior

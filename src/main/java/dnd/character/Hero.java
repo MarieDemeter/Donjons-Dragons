@@ -4,7 +4,7 @@ import dnd.attack.Attack;
 
 import java.util.Scanner;
 
-public abstract class Character {
+public abstract class Hero {
     private String name;
     private char image = 'A';
     private int life;
@@ -16,7 +16,7 @@ public abstract class Character {
     /**
      * Constructor of a character without parameters
      */
-    public Character() {
+    public Hero() {
     }
 
     /**
@@ -27,7 +27,7 @@ public abstract class Character {
      * @param strength    The default value of the strength of the character at the start of the game
      * @param maxStrength The default value of the max strength of the character for the game
      */
-    public Character(int life, int maxLife, int strength, int maxStrength) {
+    public Hero(int life, int maxLife, int strength, int maxStrength) {
         this.life = life;
         this.strength = strength;
         this.maxLife = maxLife;
