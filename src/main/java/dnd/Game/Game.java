@@ -2,8 +2,6 @@ package dnd.Game;
 
 import dnd.Exception.CharacterOutsideOfBoard;
 import dnd.character.Character;
-import dnd.character.Mage;
-import dnd.character.Warrior;
 
 import java.util.Scanner;
 
@@ -55,20 +53,25 @@ public class Game {
      * @return Character character create by the player
      */
     private Character createCharacter() {
-        String typeOfCharacterChosen;
+        String typeOfCharacterChosen = "";
         Character character = null;
 
         while (character == null) {
-            System.out.println("Quel personnage voulez-vous jouer (guerrier ou mage) ?");
+            System.out.println("Quel personnage voulez-vous jouer (Warrior ou Mage) ?");
             typeOfCharacterChosen = this.input();
-
-            if (typeOfCharacterChosen.equals("guerrier")) {
+            try {
+                Class typeClass = Class.forName("dnd.character." + typeOfCharacterChosen);
+                character = (Character) typeClass.getDeclaredConstructor().newInstance();
+            } catch (Exception e) {
+                System.out.println("Ce type de personnage n'existe pas.");
+            }
+            /*if (typeOfCharacterChosen.equals("guerrier")) {
                 character = new Warrior();
             } else if (typeOfCharacterChosen.equals("mage")) {
                 character = new Mage();
             } else if (typeOfCharacterChosen.equals("exit")) {
                 this.quitGame();
-            }
+            }*/
         }
         character.setName(character.chooseName());
         return character;
