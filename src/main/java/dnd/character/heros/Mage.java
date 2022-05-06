@@ -1,4 +1,6 @@
-package dnd.character;
+package dnd.character.heros;
+
+import dnd.character.Character;
 
 public class Mage extends Character {
 

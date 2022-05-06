@@ -1,6 +1,6 @@
-package dnd.Game;
+package dnd.game;
 
-import dnd.Exception.CharacterOutsideOfBoard;
+import dnd.exception.CharacterOutsideOfBoard;
 import dnd.character.Character;
 
 import java.util.Scanner;

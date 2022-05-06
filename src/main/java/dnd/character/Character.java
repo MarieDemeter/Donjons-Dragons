@@ -1,6 +1,6 @@
 package dnd.character;
 
-import dnd.Weapon;
+import dnd.attack.Attack;
 
 import java.util.Scanner;
 
@@ -11,7 +11,7 @@ public abstract class Character {
     private int maxLife;
     private int strength;
     private int maxStrength;
-    private Weapon weapon;
+    private Attack attack;
 
     /**
      * Constructor of a character without parameters
@@ -147,17 +147,17 @@ public abstract class Character {
      *
      * @return The current weapon of the character
      */
-    public Weapon getWeapon() {
-        return weapon;
+    public Attack getWeapon() {
+        return attack;
     }
 
     /**
      * Setter of weapon (set the value of the weapon of the character)
      *
-     * @param weapon the weapon chosen by the player
+     * @param attack the weapon chosen by the player
      */
-    public void setWeapon(Weapon weapon) {
-        this.weapon = weapon;
+    public void setWeapon(Attack attack) {
+        this.attack = attack;
     }
 
 
@@ -171,7 +171,7 @@ public abstract class Character {
 
     public String chooseWeapon() {
         String weaponOfCharacterChosen;
-        Weapon weapon;
+        Attack attack;
         Scanner chooseWeapon = new Scanner(System.in);
         System.out.println("Quel sera l'arme de votre personnage ? ");
         weaponOfCharacterChosen = chooseWeapon.nextLine();

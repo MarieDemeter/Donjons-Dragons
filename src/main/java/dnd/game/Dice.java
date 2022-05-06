@@ -1,4 +1,4 @@
-package dnd.Game;
+package dnd.game;
 
 public class Dice {
     private static int valueOfDice = 6;

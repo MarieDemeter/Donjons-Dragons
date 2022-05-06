@@ -1,6 +1,6 @@
-package dnd.Game;
+package dnd.game;
 
-import dnd.Exception.CharacterOutsideOfBoard;
+import dnd.exception.CharacterOutsideOfBoard;
 
 public class Board {
     private Cell[] board = new Cell[64];
