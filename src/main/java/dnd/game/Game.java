@@ -73,7 +73,7 @@ public class Game {
                 this.quitGame();
             }*/
         }
-        hero.setName(hero.chooseName());
+        hero.setName(this.chooseName());
         return hero;
     }
 
@@ -200,6 +200,14 @@ public class Game {
     private String input() {
         Scanner input = new Scanner(System.in);
         return input.nextLine();
+    }
+
+    private String chooseName() {
+        String nameOfCharacterChosen;
+        Scanner chooseName = new Scanner(System.in);
+        System.out.println("Quel sera le nom de votre personnage ? ");
+        nameOfCharacterChosen = chooseName.nextLine();
+        return nameOfCharacterChosen;
     }
 
 }
