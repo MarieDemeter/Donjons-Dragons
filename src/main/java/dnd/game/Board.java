@@ -1,17 +1,10 @@
 package dnd.game;
 
+import dnd.event.Event;
 import dnd.exception.CharacterOutsideOfBoard;
 
 public class Board {
     private Cell[] board = new Cell[64];
-
-    /*public Cell[] getBoard() {
-        return board;
-    }
-
-    public void setBoard(Cell[] board) {
-        this.board = board;
-    }*/
 
     public Board() {
         for (int i = 0; i < board.length; i++) {
@@ -20,7 +13,7 @@ public class Board {
     }
 
     public Cell getCell(int playerPosition) throws CharacterOutsideOfBoard {
-        if (playerPosition+1 > this.board.length-1) {
+        if (playerPosition + 1 > this.board.length - 1) {
             throw new CharacterOutsideOfBoard();
         } else {
             return this.board[playerPosition];

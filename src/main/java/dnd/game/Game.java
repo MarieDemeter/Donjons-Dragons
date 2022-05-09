@@ -127,8 +127,11 @@ public class Game {
                 playerPosition += valueOfDice;
                 try {
                     Cell cellPosition = this.board.getCell(playerPosition);
-                    System.out.println("Vous êtes donc sur la case " + cellPosition.number + "\n");
-                    //x.launchEvent(character);
+                    System.out.println("Vous êtes donc sur la case " + cellPosition.getNumber() + "\n");
+
+                    if (cellPosition.getEvent() != null) {
+                        System.out.println("Sur cette case se trouve un(e) " + cellPosition.getEvent().trigger() +  "\n");
+                    }
                     /*if (playerPosition < this.board.getBoard().length) {
                         System.out.println("Vous êtes donc sur la case " + playerPosition + "\n");
                     } else {
@@ -140,8 +143,6 @@ public class Game {
                 }
             }
         }
-
-        System.out.println("Voulez-vous recommencer une partie ? (o ou n)");
         playAgain();
     }
 
@@ -149,6 +150,7 @@ public class Game {
      * Control the choice of the player to know if he wants to play again or stop the game
      */
     private void playAgain() {
+        System.out.println("Voulez-vous recommencer une partie ? (o ou n)");
         String playAgain = "";
 
         while (!playAgain.equals("o") && !playAgain.equals("n")) {
