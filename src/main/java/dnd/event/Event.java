@@ -1,7 +1,9 @@
 package dnd.event;
 
+import dnd.character.Hero;
+
 public interface Event {
-    public default String trigger() {
+    public default Hero trigger(Hero hero) {
         return null;
     }
 }

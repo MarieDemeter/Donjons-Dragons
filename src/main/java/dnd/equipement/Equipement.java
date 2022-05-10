@@ -1,5 +1,6 @@
 package dnd.equipement;
 
+import dnd.character.Hero;
 import dnd.event.Event;
 
 public class Equipement implements Event {
@@ -12,8 +13,8 @@ public class Equipement implements Event {
     }
 
     @Override
-    public String trigger() {
-        return this.getClass().getSimpleName();
+    public Hero trigger(Hero hero) {
+        return hero;
     }
 
     public String getName() {

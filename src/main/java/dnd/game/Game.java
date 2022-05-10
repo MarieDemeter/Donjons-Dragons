@@ -130,7 +130,10 @@ public class Game {
                     System.out.println("Vous êtes donc sur la case " + cellPosition.getNumber() + "\n");
 
                     if (cellPosition.getEvent() != null) {
-                        System.out.println("Sur cette case se trouve un(e) " + cellPosition.getEvent().trigger() +  "\n");
+                        this.hero = cellPosition.getEvent().trigger(this.hero);
+                        if(this.hero.getLife()<=0){
+                            playAgain();
+                        }
                     }
                     /*if (playerPosition < this.board.getBoard().length) {
                         System.out.println("Vous êtes donc sur la case " + playerPosition + "\n");
@@ -173,13 +176,20 @@ public class Game {
      * Control if the player wants to play again with the same character or not
      */
     private void sameCharacterOrNot() {
-        System.out.println("Voulez-vous garder le même personnage ? (o ou n)");
         String sameCharacter = "";
 
         while (!sameCharacter.equals("o") && !sameCharacter.equals("n")) {
+            System.out.println("Voulez-vous garder le même personnage ? (o ou n)");
             sameCharacter = this.input();
             switch (sameCharacter) {
                 case "o":
+                    if(hero.getLife()<=0){
+                        System.out.println("Désolé, votre personnage est mort ! Vous devez en créer un nouveau !");
+                        this.hero = createCharacter();
+                        this.board = new Board();
+                        this.makeMenuchoice();
+                        break;
+                    }
                     this.playGame();
                     break;
                 case "n":
