@@ -1,8 +1,8 @@
 package dnd.equipement.heal;
 
-import dnd.equipement.Equipement;
+import dnd.equipement.Heal;
 
-public class BigPotionLife extends Equipement {
+public class BigPotionLife extends Heal {
 
     public BigPotionLife() {
         super("Grande potion de vie", 5);

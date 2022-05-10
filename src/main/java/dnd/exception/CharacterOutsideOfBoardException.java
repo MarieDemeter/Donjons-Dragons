@@ -1,8 +1,8 @@
 package dnd.exception;
 
-public class CharacterOutsideOfBoard extends Exception{
+public class CharacterOutsideOfBoardException extends Exception{
 
-    public CharacterOutsideOfBoard () {
+    public CharacterOutsideOfBoardException() {
     }
 
     @Override

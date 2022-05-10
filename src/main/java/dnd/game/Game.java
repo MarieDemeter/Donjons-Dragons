@@ -1,7 +1,7 @@
 package dnd.game;
 
 import dnd.character.Hero;
-import dnd.exception.CharacterOutsideOfBoard;
+import dnd.exception.CharacterOutsideOfBoardException;
 
 import java.util.Scanner;
 
@@ -140,7 +140,7 @@ public class Game {
                     } else {
                         throw new CharacterOutsideOfBoard();
                     }*/
-                } catch (CharacterOutsideOfBoard e) {
+                } catch (CharacterOutsideOfBoardException e) {
                     System.out.println(e);
                     break;
                 }

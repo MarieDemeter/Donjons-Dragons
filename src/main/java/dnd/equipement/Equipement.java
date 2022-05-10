@@ -3,13 +3,12 @@ package dnd.equipement;
 import dnd.character.Hero;
 import dnd.event.Event;
 
-public class Equipement implements Event {
+public abstract class Equipement implements Event {
     private String name;
-    private int strength;
 
-    public Equipement(String name, int strength) {
+    public Equipement(String name) {
         this.name = name;
-        this.strength = strength;
+
     }
 
     @Override
@@ -23,14 +22,6 @@ public class Equipement implements Event {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public int getStrength() {
-        return strength;
-    }
-
-    public void setStrength(int strength) {
-        this.strength = strength;
     }
 
     @Override
