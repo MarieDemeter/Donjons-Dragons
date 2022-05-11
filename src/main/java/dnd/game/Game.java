@@ -1,6 +1,14 @@
 package dnd.game;
 
+import dnd.character.Enemy;
 import dnd.character.Hero;
+import dnd.character.heros.Mage;
+import dnd.character.heros.Warrior;
+import dnd.equipement.Equipement;
+import dnd.equipement.Heal;
+import dnd.equipement.Spell;
+import dnd.equipement.Weapon;
+import dnd.event.Event;
 import dnd.exception.CharacterOutsideOfBoardException;
 
 import java.util.Scanner;
@@ -130,8 +138,9 @@ public class Game {
                     System.out.println("Vous êtes donc sur la case " + cellPosition.getNumber() + "\n");
 
                     if (cellPosition.getEvent() != null) {
-                        this.hero = cellPosition.getEvent().trigger(this.hero);
-                        if(this.hero.getLife()<=0){
+                        cellPosition.getEvent().trigger();
+                        this.startEvent(hero, cellPosition);
+                        if (this.hero.getLife() <= 0) {
                             playAgain();
                         }
                     }
@@ -183,7 +192,7 @@ public class Game {
             sameCharacter = this.input();
             switch (sameCharacter) {
                 case "o":
-                    if(hero.getLife()<=0){
+                    if (hero.getLife() <= 0) {
                         System.out.println("Désolé, votre personnage est mort ! Vous devez en créer un nouveau !");
                         this.hero = createCharacter();
                         this.board = new Board();
@@ -222,6 +231,130 @@ public class Game {
         return nameOfCharacterChosen;
     }
 
-}
+    private void startEvent(Hero hero, Cell playerCell) {
+        Event event = playerCell.getEvent();
+        if (event instanceof Enemy) {
+            Enemy enemy = (Enemy) event;
+            System.out.println(enemy);
 
+            while (hero.getLife() > 0 || enemy.getLife() > 0) {
+                System.out.println("Vous attaquez l'ennemi");
+                Equipement equipement = hero.getEquipement();
+                int heroStrength = 0;
+                if (equipement != null) {
+                    if (hero instanceof Warrior) {
+                        Weapon weapon = (Weapon) equipement;
+                        heroStrength = hero.getStrength() + weapon.getStrength();
+                    } else {
+                        Spell spell = (Spell) equipement;
+                        heroStrength = hero.getStrength() + spell.getStrength();
+                    }
+                } else {
+                    heroStrength = hero.getStrength();
+                }
+                enemy.setLife(enemy.getLife() - heroStrength);
+                if (enemy.getLife() > 0) {
+                    System.out.println("Vous avez infligé " + heroStrength + " de dégats à l'ennemi, il a maintenant " + enemy.getLife() + " points de vie");
+                } else {
+                    System.out.println("Bravo vous venez de tuer le " + enemy.getClass().getSimpleName());
+                    break;
+                }
+
+                System.out.println("Maintenant c'est au tour de l'ennemi");
+                hero.setLife(hero.getLife() - enemy.getStrength());
+                if (hero.getLife() > 0) {
+                    System.out.println("L'ennemi vous a infligé " + enemy.getStrength() + " de dégats vous avez maintenant " + hero.getLife() + " points de vie");
+                } else {
+                    System.out.println("Ho non, le " + enemy.getClass().getSimpleName() + " vous a tué !");
+                    break;
+                }
+            }
+
+        }else if (event instanceof Weapon && hero instanceof Warrior) {
+            Weapon weapon = (Weapon) event;
+            String takeWeapon = "";
+
+            if (hero.getEquipement() != null) {
+                System.out.println("Tu as déjà un(e) " + hero.getEquipement().getClass().getSimpleName() + " en main !");
+            } else {
+                System.out.println("Tu n'as pas encore d'arme en main !");
+            }
+
+            while (!takeWeapon.equals("o") && !takeWeapon.equals("n")) {
+                System.out.println("Veux-tu porter cette arme ? (o ou n)");
+                takeWeapon = this.input();
+                switch (takeWeapon) {
+                    case "o":
+                        hero.setEquipement(weapon);
+                        System.out.println("Bravo, tu as maintenant " + (hero.getStrength() + weapon.getStrength()) + " points de force");
+                        break;
+                    case "n":
+                        System.out.println("Tu passes ton chemin.");
+                        break;
+                    default:
+                        System.out.println("Veuillez saisir une réponse correcte");
+                        break;
+                }
+            }
+
+        } else if (event instanceof Spell && hero instanceof Mage) {
+            Spell spell = (Spell) event;
+            String takeSpell = "";
+
+            if (hero.getEquipement() != null) {
+                System.out.println("Tu possède déjà le sort " + hero.getEquipement().getClass().getSimpleName());
+            } else {
+                System.out.println("Tu ne connais pas encore de sort !");
+            }
+
+            while (!takeSpell.equals("o") && !takeSpell.equals("n")) {
+                System.out.println("Veux-tu apprendre ce sort ? (o ou n)");
+                takeSpell = this.input();
+                switch (takeSpell) {
+                    case "o":
+                        hero.setEquipement(spell);
+                        System.out.println("Bravo, tu as maintenant " + (hero.getStrength()+spell.getStrength()) + " points de force");
+                        break;
+                    case "n":
+                        System.out.println("Tu passes ton chemin.");
+                        break;
+                    default:
+                        System.out.println("Veuillez saisir une réponse correcte");
+                        break;
+                }
+            }
+
+        } else if (event instanceof Heal) {
+            Heal heal = (Heal) event;
+            String takeHeal = "";
+
+            while (!takeHeal.equals("o") && !takeHeal.equals("n")) {
+                System.out.println("Veux-tu prendre cette potion? (o ou n)");
+                takeHeal = this.input();
+                switch (takeHeal) {
+                    case "o":
+                        hero.setLife(Math.min(hero.getLife() + heal.getHeal(), hero.getMaxLife()));
+                        System.out.println("Bravo, tu as maintenant " + hero.getLife() + " points de vie");
+                        /*
+                        if (hero.getLife()+heal.getHeal() < hero.getMaxLife()){
+                            hero.setLife(hero.getLife()+heal.getHeal());
+                        } else {
+                            hero.setLife(hero.getMaxLife());
+                        }*/
+                        break;
+                    case "n":
+                        System.out.println("Tu passes ton chemin.");
+                        break;
+                    default:
+                        System.out.println("Veuillez saisir une réponse correcte");
+                        break;
+                }
+            }
+
+        } else {
+            System.out.println("Dommage, ceci ne correspond pas à ton type de personnage !");
+        }
+
+    }
+}
 

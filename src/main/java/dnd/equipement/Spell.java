@@ -1,5 +1,7 @@
 package dnd.equipement;
 
+import dnd.character.Hero;
+
 public class Spell extends Equipement{
     private int strength;
 
@@ -7,4 +9,9 @@ public class Spell extends Equipement{
         super(name);
         this.strength = strength;
     }
+
+    public int getStrength() {
+        return strength;
+    }
+
 }

@@ -6,7 +6,7 @@ public abstract class Hero extends Character {
     private String name;
     private int maxLife;
     private int maxStrength;
-    private Equipement equipement;
+    private Equipement equipement = null;
 
     /**
      * Constructor of a character without parameters

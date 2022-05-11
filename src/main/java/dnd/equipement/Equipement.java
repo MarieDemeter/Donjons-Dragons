@@ -11,17 +11,17 @@ public abstract class Equipement implements Event {
 
     }
 
-    @Override
-    public Hero trigger(Hero hero) {
-        return hero;
-    }
-
     public String getName() {
         return name;
     }
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @Override
+    public void trigger() {
+        System.out.println("Sur cette case se trouve un(e) " + this.getClass().getSimpleName());
     }
 
     @Override
