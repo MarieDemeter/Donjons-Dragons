@@ -34,7 +34,7 @@ public abstract class Equipement implements Event {
         return "Parfait, tu viens de trouver un(e) " + this.getClass().getSimpleName() + "." + "\n";
     }
 
-    String equipementInput() {
+    public String equipementInput() {
         Scanner input = new Scanner(System.in);
         return input.nextLine();
     }

@@ -44,7 +44,6 @@ public class Weapon extends Equipement {
             }
         } else {
             System.out.println("Dommage, ceci ne correspond pas à ton type de personnage !");
-
         }
         return hero;
     }

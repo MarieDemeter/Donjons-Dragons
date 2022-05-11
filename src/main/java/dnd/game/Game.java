@@ -1,5 +1,6 @@
 package dnd.game;
 
+import dnd.Database;
 import dnd.character.Enemy;
 import dnd.character.Hero;
 import dnd.character.heros.Mage;
@@ -10,6 +11,7 @@ import dnd.equipement.Spell;
 import dnd.equipement.Weapon;
 import dnd.event.Event;
 import dnd.exception.CharacterOutsideOfBoardException;
+import java.sql.*;
 
 import java.util.Scanner;
 
@@ -17,11 +19,13 @@ public class Game {
     private Dice dice;
     private Board board;
     private Hero hero;
+    private Database database;
 
     public Game() {
         dice = new Dice();
         board = new Board();
         hero = this.createCharacter();
+        database = new Database();
     }
 
     /**
@@ -32,6 +36,7 @@ public class Game {
     public static void main(String[] args) {
         Game game = new Game();
         game.makeMenuchoice();
+
     }
 
     /**
@@ -95,6 +100,7 @@ public class Game {
             isItValid = this.printMenu();
             switch (isItValid) {
                 case "o":
+                    this.database.addHeroes(hero);
                     playGame();
                     break;
                 case "c":
