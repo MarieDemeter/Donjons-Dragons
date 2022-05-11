@@ -139,7 +139,8 @@ public class Game {
 
                     if (cellPosition.getEvent() != null) {
                         cellPosition.getEvent().trigger();
-                        this.startEvent(hero, cellPosition);
+                        cellPosition.getEvent().playEvent(hero);
+                        //this.startEvent(hero, cellPosition);
                         if (this.hero.getLife() <= 0) {
                             playAgain();
                         }
@@ -237,7 +238,6 @@ public class Game {
             eventFight(hero, (Enemy) event);
         }else if (event instanceof Weapon && hero instanceof Warrior) {
             eventWeapon(hero, (Weapon) event);
-
         } else if (event instanceof Spell && hero instanceof Mage) {
             eventSpell(hero, (Spell) event);
 
