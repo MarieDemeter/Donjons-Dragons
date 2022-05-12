@@ -11,7 +11,6 @@ import dnd.equipement.Spell;
 import dnd.equipement.Weapon;
 import dnd.event.Event;
 import dnd.exception.CharacterOutsideOfBoardException;
-import java.sql.*;
 
 import java.util.Scanner;
 
@@ -44,6 +43,7 @@ public class Game {
      */
     private void quitGame() {
         System.out.println("A bientôt !");
+        this.database.closeDatabase();
         System.exit(0);
     }
 
