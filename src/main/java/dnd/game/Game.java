@@ -11,6 +11,7 @@ import dnd.equipement.Weapon;
 import dnd.event.Event;
 import dnd.exception.CharacterOutsideOfBoardException;
 
+import java.util.List;
 import java.util.Scanner;
 
 public class Game {
@@ -21,11 +22,13 @@ public class Game {
     private Menu menu;
 
     public Game() {
+        this.menu = new MenuTerminal();
+        this.database = new Database();
         this.dice = new Dice();
         this.board = new Board();
-        this.hero = this.createCharacter();
-        this.database = new Database();
-        this.menu = new MenuTerminal();
+//        this.hero = this.createCharacter();
+        this.hero = this.chooseCharacter();
+        this.makeMenuchoice();
     }
 
     public Dice getDice() {
@@ -66,8 +69,41 @@ public class Game {
      * @param args String[]
      */
     public static void main(String[] args) {
-        Game game = new Game();
-        game.menu.makeMenuchoice(game);
+        new Game();
+    }
+
+    /**
+     * Control the choice of the player on the main menu
+     */
+    public void makeMenuchoice() {
+        String isItValid = "";
+
+        while (!isItValid.equals("o")) {
+            this.menu.printMenu();
+            isItValid = this.menu.input();
+            switch (isItValid) {
+                case "o":
+                    this.getDatabase().addHeroes(this.getHero());
+                    this.playGame();
+                    break;
+                case "c":
+                    isItValid = "";
+                    this.menu.sout(this.getHero().toString());
+                    break;
+                case "m":
+                    this.createCharacter();
+                    this.setHero(this.hero);
+                    isItValid = "";
+                    break;
+                case "q":
+                    this.quitGame();
+                    break;
+                default:
+                    this.menu.sout("Je n'ai pas compris !");
+                    isItValid = "";
+                    break;
+            }
+        }
     }
 
     /**
@@ -79,14 +115,12 @@ public class Game {
         System.exit(0);
     }
 
-
-
     /**
      * Create a new character (choose name and type)
      *
      * @return Character character create by the player
      */
-    public Hero createCharacter() {
+    public void createCharacter() {
         String typeOfCharacterChosen = "";
         Hero hero = null;
 
@@ -108,9 +142,8 @@ public class Game {
             }*/
         }
         hero.setName(this.chooseName());
-        return hero;
+        this.hero = hero;
     }
-
 
 
     /**
@@ -192,17 +225,19 @@ public class Game {
                 case "o":
                     if (hero.getLife() <= 0) {
                         this.menu.sout("Désolé, votre personnage est mort ! Vous devez en créer un nouveau !");
-                        this.hero = createCharacter();
+                        createCharacter();
                         this.board = new Board();
-                        this.menu.makeMenuchoice(this);
+                        this.makeMenuchoice();
+
                         break;
                     }
                     this.playGame();
                     break;
                 case "n":
-                    this.hero = createCharacter();
+                    createCharacter();
                     this.board = new Board();
-                    this.menu.makeMenuchoice(this);
+                    this.menu.printMenu();
+                    this.makeMenuchoice();
                     break;
                 default:
                     this.menu.sout("Veuillez saisir une réponse correcte");
@@ -213,9 +248,8 @@ public class Game {
 
     public String chooseName() {
         String nameOfCharacterChosen;
-        Scanner chooseName = new Scanner(System.in);
         this.menu.sout("Quel sera le nom de votre personnage ? ");
-        nameOfCharacterChosen = chooseName.nextLine();
+        nameOfCharacterChosen = this.menu.input();
         return nameOfCharacterChosen;
     }
 
@@ -223,7 +257,7 @@ public class Game {
         Event event = playerCell.getEvent();
         if (event instanceof Enemy) {
             eventFight(hero, (Enemy) event);
-        }else if (event instanceof Weapon && hero instanceof Warrior) {
+        } else if (event instanceof Weapon && hero instanceof Warrior) {
             eventWeapon(hero, (Weapon) event);
         } else if (event instanceof Spell && hero instanceof Mage) {
             eventSpell(hero, (Spell) event);
@@ -279,7 +313,7 @@ public class Game {
             switch (takeSpell) {
                 case "o":
                     hero.setEquipement(event);
-                    this.menu.sout("Bravo, tu as maintenant " + (hero.getStrength()+event.getStrength()) + " points de force");
+                    this.menu.sout("Bravo, tu as maintenant " + (hero.getStrength() + event.getStrength()) + " points de force");
                     break;
                 case "n":
                     this.menu.sout("Tu passes ton chemin.");
@@ -351,6 +385,64 @@ public class Game {
             } else {
                 this.menu.sout("Ho non, le " + event.getClass().getSimpleName() + " vous a tué !");
                 break;
+            }
+        }
+    }
+
+    public Hero chooseCharacter() {
+        this.menu.menuPrintorCreateCharacter();
+        String input = "";
+        while (!input.equals("s") && !input.equals("c") && !input.equals("q")) {
+            input = this.menu.input();
+            switch (input) {
+                case "s":
+                    List<Hero> allSaveHeroes = this.database.getHeroes();
+                    for (int i = 0; i < allSaveHeroes.size(); i++) {
+                        this.menu.sout("Héro n°" + i);
+                        this.menu.sout(allSaveHeroes.get(i).toString());
+                    }
+                    this.menu.sout("Taper c pour créer votre personnage ou o pour selectionner l'un des héros sauvegardés");
+                    String answer = "";
+                    while (!answer.equals("c") && !answer.equals("o")) {
+                        answer = this.menu.input();
+                        switch (answer) {
+                            case "c":
+                                this.createCharacter();
+                                break;
+                            case "o":
+                                this.chooseSaveCharacter(allSaveHeroes);
+                                break;
+                            default:
+                                this.menu.sout("Veuillez saisir une réponse correcte");
+                                break;
+                        }
+                    }
+                    break;
+                case "c":
+                    this.createCharacter();
+                    break;
+                case "q":
+                    this.quitGame();
+                    break;
+                default:
+                    this.menu.sout("Veuillez saisir une réponse correcte");
+                    break;
+            }
+        }
+        return this.hero;
+    }
+
+    public void chooseSaveCharacter(List<Hero> heroes) {
+
+        this.menu.sout("taper le numéro du héro que vous voulez jouer");
+        Scanner intInput = new Scanner(System.in);
+        int numberChoosen = -1;
+        while (numberChoosen < 0 || numberChoosen > heroes.size()) {
+            numberChoosen = intInput.nextInt();
+            if (numberChoosen >= 0 && numberChoosen < heroes.size()) {
+                this.hero = heroes.get(numberChoosen);
+            } else {
+                this.menu.sout("Veuillez saisir une réponse correcte");
             }
         }
     }

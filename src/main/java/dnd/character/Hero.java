@@ -100,8 +100,16 @@ public abstract class Hero extends Character {
 
     @Override
     public String toString() {
-        return "Bonjour " + this.getClass().getSimpleName() + " " + this.name + "," + "\n" +
-                "Tu as actuellement " + super.getLife() + " points de vie, mais tu vas pouvoir en obtenir " + this.maxLife + " au maximum." + "\n" +
-                "Concernant ta force, elle est actuellement de " + super.getStrength() + " mais en jouant tu atteindras peut-être ta force maximale de " + this.maxStrength + "." + "\n";
+        String equipement = "";
+        if (this.getEquipement() != null){
+            equipement = "Il possède un(e) " + this.getEquipement().getName();
+        } else {
+            equipement = "Il ne possède pas d'équipement";
+        }
+
+        return this.getClass().getSimpleName() + " " + this.name + "," + "\n" +
+                "Il a " + super.getLife() + " points de vie et " + this.maxLife + " au maximum." + "\n" +
+                "Sa force est actuellement de " + super.getStrength() + " et sa force maximal est " + this.maxStrength + "." + "\n" +
+                equipement + "\n\n";
     }
 }

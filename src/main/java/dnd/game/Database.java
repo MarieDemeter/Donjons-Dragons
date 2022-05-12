@@ -1,13 +1,17 @@
 package dnd.game;
 
 import dnd.character.Hero;
+import dnd.character.heros.Warrior;
+import dnd.equipement.Equipement;
+import dnd.equipement.Spell;
+import dnd.equipement.Weapon;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Database {
     private Connection connection;
-    Statement statement = null;
-    ResultSet resultat = null;
 
     public static void main(String[] args) {
         Database database = new Database();
@@ -36,8 +40,7 @@ public class Database {
 
     public void addHeroes(Hero hero) {
 
-        try {
-            PreparedStatement preparedStatement = this.connection.prepareStatement("INSERT INTO Hero(Type, Name, Life, Strength, Equipement) VALUES(?, ?, ?, ?,?);");
+        try (PreparedStatement preparedStatement = this.connection.prepareStatement("INSERT INTO Hero(Type, Name, Life, Strength, Equipement) VALUES(?, ?, ?, ?,?);")) {
             preparedStatement.setString(1, hero.getClass().getSimpleName());
             preparedStatement.setString(2, hero.getName());
             preparedStatement.setInt(3, hero.getLife());
@@ -46,19 +49,59 @@ public class Database {
 
             preparedStatement.executeUpdate();
 
-            this.statement = preparedStatement;
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
+    public List<Hero> getHeroes() {
+        List<Hero> heroes = new ArrayList<Hero>();
+        Hero hero = null;
+
+        try {
+            Statement statement = connection.createStatement();
+            ResultSet result = statement.executeQuery("SELECT * FROM Hero;");
+
+            while (result.next()) {
+                String type = result.getString("Type");
+                String name = result.getString("Name");
+                int life = result.getInt("Life");
+                int strength = result.getInt("Strength");
+                String equipement = result.getString("Equipement");
+                Equipement heroEquipement = null;
+
+                try {
+                    Class typeClass = Class.forName("dnd.character.heros." + type);
+                    hero = (Hero) typeClass.getDeclaredConstructor().newInstance();
+
+                    if (equipement.equals("Club") || equipement.equals("Sword")){
+                        Class typeEquiepement = Class.forName("dnd.equipement.weapon." + equipement);
+                        heroEquipement = (Weapon) typeEquiepement.getDeclaredConstructor().newInstance();
+                    } else if (equipement.equals("Flash")||equipement.equals("FireBall")) {
+                        Class typeEquiepement = Class.forName("dnd.equipement.spell." + equipement);
+                        heroEquipement = (Spell) typeEquiepement.getDeclaredConstructor().newInstance();
+                    }
+
+                } catch (Exception e) {
+                    System.out.println(e);
+                }
+
+                hero.setName(name);
+                hero.setLife(life);
+                hero.setStrength(strength);
+                hero.setEquipement(heroEquipement);
+
+                heroes.add(hero);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return heroes;
+    }
+
     public void closeDatabase() {
         try {
-            if (this.resultat != null)
-                this.resultat.close();
-            if (this.statement != null)
-                this.statement.close();
             if (this.connection != null)
                 this.connection.close();
         } catch (SQLException ignore) {
