@@ -83,7 +83,6 @@ public class Game {
             isItValid = this.menu.input();
             switch (isItValid) {
                 case "o":
-                    this.getDatabase().addHeroes(this.getHero());
                     this.playGame();
                     break;
                 case "c":
@@ -182,6 +181,18 @@ public class Game {
                     }*/
                 } catch (CharacterOutsideOfBoardException e) {
                     this.menu.sout(e.toString());
+                    this.menu.sout("Voulez-vous sauvegarder votre personnage ? (taper o pour save)");
+                    String saveHero = "";
+
+                    while (!saveHero.equals("o") && !saveHero.equals("n")) {
+                        saveHero = this.menu.input();
+                        if ("o".equals(saveHero)) {
+                            this.getDatabase().addHeroes(this.getHero());
+                            System.out.println("Votre héro a bien été sauvegardé !");
+                        } else {
+                            this.menu.sout("Veuillez saisir une réponse correcte");
+                        }
+                    }
                     break;
                 }
             }
@@ -206,7 +217,7 @@ public class Game {
                     this.quitGame();
                     break;
                 default:
-                    this.menu.sout("Veuillez saisir une réponse correcte");
+                    this.menu.sout("Votre héro n'a pas été sauvegardé !");
                     break;
             }
         }
@@ -224,8 +235,8 @@ public class Game {
             switch (sameCharacter) {
                 case "o":
                     if (hero.getLife() <= 0) {
-                        this.menu.sout("Désolé, votre personnage est mort ! Vous devez en créer un nouveau !");
-                        createCharacter();
+                        this.menu.sout("Désolé, votre personnage est mort ! Vous devez en créer un nouveau ou en choisir un sauvegardé !");
+                        this.chooseCharacter();
                         this.board = new Board();
                         this.makeMenuchoice();
 
@@ -234,9 +245,8 @@ public class Game {
                     this.playGame();
                     break;
                 case "n":
-                    createCharacter();
+                    this.chooseCharacter();
                     this.board = new Board();
-                    this.menu.printMenu();
                     this.makeMenuchoice();
                     break;
                 default:
