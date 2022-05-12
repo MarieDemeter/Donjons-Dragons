@@ -18,12 +18,46 @@ public class Game {
     private Board board;
     private Hero hero;
     private Database database;
+    private Menu menu;
 
     public Game() {
-        dice = new Dice();
-        board = new Board();
-        hero = this.createCharacter();
-        database = new Database();
+        this.dice = new Dice();
+        this.board = new Board();
+        this.hero = this.createCharacter();
+        this.database = new Database();
+        this.menu = new MenuTerminal();
+    }
+
+    public Dice getDice() {
+        return dice;
+    }
+
+    public void setDice(Dice dice) {
+        this.dice = dice;
+    }
+
+    public Board getBoard() {
+        return board;
+    }
+
+    public void setBoard(Board board) {
+        this.board = board;
+    }
+
+    public Hero getHero() {
+        return hero;
+    }
+
+    public void setHero(Hero hero) {
+        this.hero = hero;
+    }
+
+    public Database getDatabase() {
+        return database;
+    }
+
+    public void setMenu(MenuTerminal menuTerminal) {
+        this.menu = menuTerminal;
     }
 
     /**
@@ -33,49 +67,37 @@ public class Game {
      */
     public static void main(String[] args) {
         Game game = new Game();
-        game.makeMenuchoice();
-
+        game.menu.makeMenuchoice(game);
     }
 
     /**
      * Use to quit the game and stop the programme
      */
-    private void quitGame() {
-        System.out.println("A bientôt !");
+    public void quitGame() {
+        this.menu.sout("A bientôt !");
         this.database.closeDatabase();
         System.exit(0);
     }
 
-    /**
-     * Function which print the menu to start the game
-     *
-     * @return String playerChoice
-     */
-    private String printMenu() {
-        System.out.println("Pour commencer à jouer, taper o");
-        System.out.println("Pour changer votre héro, taper m");
-        System.out.println("Pour voir les caractéristiques de votre héro, taper c");
-        System.out.println("Pour quitter le jeu, taper q");
-        return this.input();
-    }
+
 
     /**
      * Create a new character (choose name and type)
      *
      * @return Character character create by the player
      */
-    private Hero createCharacter() {
+    public Hero createCharacter() {
         String typeOfCharacterChosen = "";
         Hero hero = null;
 
         while (hero == null) {
-            System.out.println("Quel personnage voulez-vous jouer (Warrior ou Mage) ?");
-            typeOfCharacterChosen = this.input();
+            this.menu.sout("Quel personnage voulez-vous jouer (Warrior ou Mage) ?");
+            typeOfCharacterChosen = this.menu.input();
             try {
                 Class typeClass = Class.forName("dnd.character.heros." + typeOfCharacterChosen);
                 hero = (Hero) typeClass.getDeclaredConstructor().newInstance();
             } catch (Exception e) {
-                System.out.println("Ce type de personnage n'existe pas.");
+                this.menu.sout("Ce type de personnage n'existe pas.");
             }
             /*if (typeOfCharacterChosen.equals("guerrier")) {
                 character = new Warrior();
@@ -89,49 +111,19 @@ public class Game {
         return hero;
     }
 
-    /**
-     * Control the choice of the player on the main menu
-     */
-    public void makeMenuchoice() {
-        String isItValid = "";
 
-        while (!isItValid.equals("o")) {
-            isItValid = this.printMenu();
-            switch (isItValid) {
-                case "o":
-                    this.database.addHeroes(hero);
-                    playGame();
-                    break;
-                case "c":
-                    isItValid = "";
-                    System.out.println(this.hero);
-                    break;
-                case "m":
-                    this.hero = createCharacter();
-                    isItValid = "";
-                    break;
-                case "q":
-                    this.quitGame();
-                    break;
-                default:
-                    System.out.println("Je n'ai pas compris !");
-                    isItValid = "";
-                    break;
-            }
-        }
-    }
 
     /**
      * Start and play the game
      */
-    private void playGame() {
-        System.out.println("Nous allons commencer, tu commences sur la case 1 :" + "\n");
+    public void playGame() {
+        this.menu.sout("Nous allons commencer, tu commences sur la case 1 :" + "\n");
         String rollDice = "";
         int playerPosition = 0;
 
         while (true) {
-            System.out.println("Appuyez sur une touche pour lancer le dé ou taper q pour quitter");
-            rollDice = this.input();
+            this.menu.sout("Appuyez sur une touche pour lancer le dé ou taper q pour quitter");
+            rollDice = this.menu.input();
 
             if (rollDice.equals("q")) {
                 this.quitGame();
@@ -140,7 +132,7 @@ public class Game {
                 playerPosition += valueOfDice;
                 try {
                     Cell cellPosition = this.board.getCell(playerPosition);
-                    System.out.println("Vous êtes donc sur la case " + cellPosition.getNumber() + "\n");
+                    this.menu.sout("Vous êtes donc sur la case " + cellPosition.getNumber() + "\n");
 
                     if (cellPosition.getEvent() != null) {
                         cellPosition.getEvent().trigger();
@@ -151,28 +143,28 @@ public class Game {
                         }
                     }
                     /*if (playerPosition < this.board.getBoard().length) {
-                        System.out.println("Vous êtes donc sur la case " + playerPosition + "\n");
+                        this.menu.sout("Vous êtes donc sur la case " + playerPosition + "\n");
                     } else {
                         throw new CharacterOutsideOfBoard();
                     }*/
                 } catch (CharacterOutsideOfBoardException e) {
-                    System.out.println(e);
+                    this.menu.sout(e.toString());
                     break;
                 }
             }
         }
-        playAgain();
+        this.playAgain();
     }
 
     /**
      * Control the choice of the player to know if he wants to play again or stop the game
      */
-    private void playAgain() {
-        System.out.println("Voulez-vous recommencer une partie ? (o ou n)");
+    public void playAgain() {
+        this.menu.sout("Voulez-vous recommencer une partie ? (o ou n)");
         String playAgain = "";
 
         while (!playAgain.equals("o") && !playAgain.equals("n")) {
-            playAgain = this.input();
+            playAgain = this.menu.input();
             switch (playAgain) {
                 case "o":
                     this.sameCharacterOrNot();
@@ -181,7 +173,7 @@ public class Game {
                     this.quitGame();
                     break;
                 default:
-                    System.out.println("Veuillez saisir une réponse correcte");
+                    this.menu.sout("Veuillez saisir une réponse correcte");
                     break;
             }
         }
@@ -190,19 +182,19 @@ public class Game {
     /**
      * Control if the player wants to play again with the same character or not
      */
-    private void sameCharacterOrNot() {
+    public void sameCharacterOrNot() {
         String sameCharacter = "";
 
         while (!sameCharacter.equals("o") && !sameCharacter.equals("n")) {
-            System.out.println("Voulez-vous garder le même personnage ? (o ou n)");
-            sameCharacter = this.input();
+            this.menu.sout("Voulez-vous garder le même personnage ? (o ou n)");
+            sameCharacter = this.menu.input();
             switch (sameCharacter) {
                 case "o":
                     if (hero.getLife() <= 0) {
-                        System.out.println("Désolé, votre personnage est mort ! Vous devez en créer un nouveau !");
+                        this.menu.sout("Désolé, votre personnage est mort ! Vous devez en créer un nouveau !");
                         this.hero = createCharacter();
                         this.board = new Board();
-                        this.makeMenuchoice();
+                        this.menu.makeMenuchoice(this);
                         break;
                     }
                     this.playGame();
@@ -210,34 +202,24 @@ public class Game {
                 case "n":
                     this.hero = createCharacter();
                     this.board = new Board();
-                    this.makeMenuchoice();
+                    this.menu.makeMenuchoice(this);
                     break;
                 default:
-                    System.out.println("Veuillez saisir une réponse correcte");
+                    this.menu.sout("Veuillez saisir une réponse correcte");
                     break;
             }
         }
     }
 
-    /**
-     * Return the string given by the player
-     *
-     * @return String value of the input of the player
-     */
-    private String input() {
-        Scanner input = new Scanner(System.in);
-        return input.nextLine();
-    }
-
-    private String chooseName() {
+    public String chooseName() {
         String nameOfCharacterChosen;
         Scanner chooseName = new Scanner(System.in);
-        System.out.println("Quel sera le nom de votre personnage ? ");
+        this.menu.sout("Quel sera le nom de votre personnage ? ");
         nameOfCharacterChosen = chooseName.nextLine();
         return nameOfCharacterChosen;
     }
 
-    private void startEvent(Hero hero, Cell playerCell) {
+    public void startEvent(Hero hero, Cell playerCell) {
         Event event = playerCell.getEvent();
         if (event instanceof Enemy) {
             eventFight(hero, (Enemy) event);
@@ -250,21 +232,21 @@ public class Game {
             eventHeal(hero, (Heal) event);
 
         } else {
-            System.out.println("Dommage, ceci ne correspond pas à ton type de personnage !");
+            this.menu.sout("Dommage, ceci ne correspond pas à ton type de personnage !");
         }
 
     }
 
-    private void eventHeal(Hero hero, Heal event) {
+    public void eventHeal(Hero hero, Heal event) {
         String takeHeal = "";
 
         while (!takeHeal.equals("o") && !takeHeal.equals("n")) {
-            System.out.println("Veux-tu prendre cette potion? (o ou n)");
-            takeHeal = this.input();
+            this.menu.sout("Veux-tu prendre cette potion? (o ou n)");
+            takeHeal = this.menu.input();
             switch (takeHeal) {
                 case "o":
                     hero.setLife(Math.min(hero.getLife() + event.getHeal(), hero.getMaxLife()));
-                    System.out.println("Bravo, tu as maintenant " + hero.getLife() + " points de vie");
+                    this.menu.sout("Bravo, tu as maintenant " + hero.getLife() + " points de vie");
                     /*
                     if (hero.getLife()+heal.getHeal() < hero.getMaxLife()){
                         hero.setLife(hero.getLife()+heal.getHeal());
@@ -273,74 +255,74 @@ public class Game {
                     }*/
                     break;
                 case "n":
-                    System.out.println("Tu passes ton chemin.");
+                    this.menu.sout("Tu passes ton chemin.");
                     break;
                 default:
-                    System.out.println("Veuillez saisir une réponse correcte");
+                    this.menu.sout("Veuillez saisir une réponse correcte");
                     break;
             }
         }
     }
 
-    private void eventSpell(Hero hero, Spell event) {
+    public void eventSpell(Hero hero, Spell event) {
         String takeSpell = "";
 
         if (hero.getEquipement() != null) {
-            System.out.println("Tu possède déjà le sort " + hero.getEquipement().getClass().getSimpleName());
+            this.menu.sout("Tu possède déjà le sort " + hero.getEquipement().getClass().getSimpleName());
         } else {
-            System.out.println("Tu ne connais pas encore de sort !");
+            this.menu.sout("Tu ne connais pas encore de sort !");
         }
 
         while (!takeSpell.equals("o") && !takeSpell.equals("n")) {
-            System.out.println("Veux-tu apprendre ce sort ? (o ou n)");
-            takeSpell = this.input();
+            this.menu.sout("Veux-tu apprendre ce sort ? (o ou n)");
+            takeSpell = this.menu.input();
             switch (takeSpell) {
                 case "o":
                     hero.setEquipement(event);
-                    System.out.println("Bravo, tu as maintenant " + (hero.getStrength()+event.getStrength()) + " points de force");
+                    this.menu.sout("Bravo, tu as maintenant " + (hero.getStrength()+event.getStrength()) + " points de force");
                     break;
                 case "n":
-                    System.out.println("Tu passes ton chemin.");
+                    this.menu.sout("Tu passes ton chemin.");
                     break;
                 default:
-                    System.out.println("Veuillez saisir une réponse correcte");
+                    this.menu.sout("Veuillez saisir une réponse correcte");
                     break;
             }
         }
     }
 
-    private void eventWeapon(Hero hero, Weapon event) {
+    public void eventWeapon(Hero hero, Weapon event) {
         String takeWeapon = "";
 
         if (hero.getEquipement() != null) {
-            System.out.println("Tu as déjà un(e) " + hero.getEquipement().getClass().getSimpleName() + " en main !");
+            this.menu.sout("Tu as déjà un(e) " + hero.getEquipement().getClass().getSimpleName() + " en main !");
         } else {
-            System.out.println("Tu n'as pas encore d'arme en main !");
+            this.menu.sout("Tu n'as pas encore d'arme en main !");
         }
 
         while (!takeWeapon.equals("o") && !takeWeapon.equals("n")) {
-            System.out.println("Veux-tu porter cette arme ? (o ou n)");
-            takeWeapon = this.input();
+            this.menu.sout("Veux-tu porter cette arme ? (o ou n)");
+            takeWeapon = this.menu.input();
             switch (takeWeapon) {
                 case "o":
                     hero.setEquipement(event);
-                    System.out.println("Bravo, tu as maintenant " + (hero.getStrength() + event.getStrength()) + " points de force");
+                    this.menu.sout("Bravo, tu as maintenant " + (hero.getStrength() + event.getStrength()) + " points de force");
                     break;
                 case "n":
-                    System.out.println("Tu passes ton chemin.");
+                    this.menu.sout("Tu passes ton chemin.");
                     break;
                 default:
-                    System.out.println("Veuillez saisir une réponse correcte");
+                    this.menu.sout("Veuillez saisir une réponse correcte");
                     break;
             }
         }
     }
 
-    private void eventFight(Hero hero, Enemy event) {
-        System.out.println(event);
+    public void eventFight(Hero hero, Enemy event) {
+        this.menu.sout(event.toString());
 
         while (hero.getLife() > 0 || event.getLife() > 0) {
-            System.out.println("Vous attaquez l'ennemi");
+            this.menu.sout("Vous attaquez l'ennemi");
             Equipement equipement = hero.getEquipement();
             int heroStrength = 0;
             if (equipement != null) {
@@ -356,18 +338,18 @@ public class Game {
             }
             event.setLife(event.getLife() - heroStrength);
             if (event.getLife() > 0) {
-                System.out.println("Vous avez infligé " + heroStrength + " de dégats à l'ennemi, il a maintenant " + event.getLife() + " points de vie");
+                this.menu.sout("Vous avez infligé " + heroStrength + " de dégats à l'ennemi, il a maintenant " + event.getLife() + " points de vie");
             } else {
-                System.out.println("Bravo vous venez de tuer le " + event.getClass().getSimpleName());
+                this.menu.sout("Bravo vous venez de tuer le " + event.getClass().getSimpleName());
                 break;
             }
 
-            System.out.println("Maintenant c'est au tour de l'ennemi");
+            this.menu.sout("Maintenant c'est au tour de l'ennemi");
             hero.setLife(hero.getLife() - event.getStrength());
             if (hero.getLife() > 0) {
-                System.out.println("L'ennemi vous a infligé " + event.getStrength() + " de dégats vous avez maintenant " + hero.getLife() + " points de vie");
+                this.menu.sout("L'ennemi vous a infligé " + event.getStrength() + " de dégats vous avez maintenant " + hero.getLife() + " points de vie");
             } else {
-                System.out.println("Ho non, le " + event.getClass().getSimpleName() + " vous a tué !");
+                this.menu.sout("Ho non, le " + event.getClass().getSimpleName() + " vous a tué !");
                 break;
             }
         }
