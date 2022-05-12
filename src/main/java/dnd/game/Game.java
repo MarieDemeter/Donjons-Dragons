@@ -190,7 +190,7 @@ public class Game {
                             this.getDatabase().addHeroes(this.getHero());
                             System.out.println("Votre héro a bien été sauvegardé !");
                         } else {
-                            this.menu.sout("Veuillez saisir une réponse correcte");
+                            this.menu.sout("Votre héro n'a pas été sauvegardé !");
                         }
                     }
                     break;
@@ -217,7 +217,7 @@ public class Game {
                     this.quitGame();
                     break;
                 default:
-                    this.menu.sout("Votre héro n'a pas été sauvegardé !");
+                    this.menu.sout("Veuillez saisir une réponse correcte");
                     break;
             }
         }
