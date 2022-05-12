@@ -1,4 +1,4 @@
-package dnd;
+package dnd.game;
 
 import dnd.character.Hero;
 

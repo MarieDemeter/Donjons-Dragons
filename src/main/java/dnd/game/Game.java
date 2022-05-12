@@ -1,6 +1,5 @@
 package dnd.game;
 
-import dnd.Database;
 import dnd.character.Enemy;
 import dnd.character.Hero;
 import dnd.character.heros.Mage;
