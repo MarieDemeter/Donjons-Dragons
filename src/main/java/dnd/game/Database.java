@@ -67,6 +67,7 @@ public class Database {
             ResultSet result = statement.executeQuery("SELECT * FROM Hero;");
 
             while (result.next()) {
+                int id = (int) result.getInt("Id");
                 String type = result.getString("Type");
                 String name = result.getString("Name");
                 int life = result.getInt("Life");
@@ -94,6 +95,7 @@ public class Database {
                 hero.setLife(life);
                 hero.setStrength(strength);
                 hero.setEquipement(heroEquipement);
+                hero.setId(id);
 
                 heroes.add(hero);
             }

@@ -7,6 +7,7 @@ public abstract class Hero extends Character {
     private int maxLife;
     private int maxStrength;
     private Equipement equipement = null;
+    private int id;
 
     /**
      * Constructor of a character without parameters
@@ -111,5 +112,12 @@ public abstract class Hero extends Character {
                 "Il a " + super.getLife() + " points de vie et " + this.maxLife + " au maximum." + "\n" +
                 "Sa force est actuellement de " + super.getStrength() + " et sa force maximal est " + this.maxStrength + "." + "\n" +
                 equipement + "\n\n";
+    }
+
+    public void setId(int id) {this.id = id;
+    }
+
+    public int getId() {
+        return id;
     }
 }

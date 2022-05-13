@@ -24,7 +24,8 @@ public class Game {
     public Game() {
         this.menu = new MenuTerminal();
         this.database = new Database();
-        this.dice = new Dice();
+        this.dice = new ClassicDice(6);
+        //this.dice = new KnowDice();
         this.board = new Board();
 //        this.hero = this.createCharacter();
         this.hero = this.chooseCharacter();
@@ -32,7 +33,7 @@ public class Game {
     }
 
     public Dice getDice() {
-        return dice;
+        return this.dice;
     }
 
     public void setDice(Dice dice) {
