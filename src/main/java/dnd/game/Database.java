@@ -45,8 +45,12 @@ public class Database {
             preparedStatement.setString(2, hero.getName());
             preparedStatement.setInt(3, hero.getLife());
             preparedStatement.setInt(4, hero.getStrength());
-            preparedStatement.setString(5, "rien");
 
+            if (hero.getEquipement() != null) {
+                preparedStatement.setString(5, hero.getEquipement().getClass().getSimpleName());
+            } else {
+                preparedStatement.setString(5, "rien");
+            }
             preparedStatement.executeUpdate();
 
         } catch (SQLException e) {
@@ -74,10 +78,10 @@ public class Database {
                     Class typeClass = Class.forName("dnd.character.heros." + type);
                     hero = (Hero) typeClass.getDeclaredConstructor().newInstance();
 
-                    if (equipement.equals("Club") || equipement.equals("Sword")){
+                    if (equipement.equals("Club") || equipement.equals("Sword")) {
                         Class typeEquiepement = Class.forName("dnd.equipement.weapon." + equipement);
                         heroEquipement = (Weapon) typeEquiepement.getDeclaredConstructor().newInstance();
-                    } else if (equipement.equals("Flash")||equipement.equals("FireBall")) {
+                    } else if (equipement.equals("Flash") || equipement.equals("FireBall")) {
                         Class typeEquiepement = Class.forName("dnd.equipement.spell." + equipement);
                         heroEquipement = (Spell) typeEquiepement.getDeclaredConstructor().newInstance();
                     }
@@ -86,6 +90,7 @@ public class Database {
                     System.out.println(e);
                 }
 
+                assert hero != null;
                 hero.setName(name);
                 hero.setLife(life);
                 hero.setStrength(strength);
@@ -97,7 +102,11 @@ public class Database {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return heroes;
+        if (heroes.size() == 0) {
+            return null;
+        } else {
+            return heroes;
+        }
     }
 
     public void closeDatabase() {

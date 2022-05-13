@@ -407,26 +407,33 @@ public class Game {
             switch (input) {
                 case "s":
                     List<Hero> allSaveHeroes = this.database.getHeroes();
-                    for (int i = 0; i < allSaveHeroes.size(); i++) {
-                        this.menu.sout("Héro n°" + i);
-                        this.menu.sout(allSaveHeroes.get(i).toString());
-                    }
-                    this.menu.sout("Taper c pour créer votre personnage ou o pour selectionner l'un des héros sauvegardés");
-                    String answer = "";
-                    while (!answer.equals("c") && !answer.equals("o")) {
-                        answer = this.menu.input();
-                        switch (answer) {
-                            case "c":
-                                this.createCharacter();
-                                break;
-                            case "o":
-                                this.chooseSaveCharacter(allSaveHeroes);
-                                break;
-                            default:
-                                this.menu.sout("Veuillez saisir une réponse correcte");
-                                break;
+                    if (allSaveHeroes != null){
+                        for (int i = 0; i < allSaveHeroes.size(); i++) {
+                            this.menu.sout("Héro n°" + i);
+                            this.menu.sout(allSaveHeroes.get(i).toString());
                         }
+                        this.menu.sout("Taper c pour créer votre personnage ou o pour selectionner l'un des héros sauvegardés");
+                        String answer = "";
+                        while (!answer.equals("c") && !answer.equals("o")) {
+                            answer = this.menu.input();
+                            switch (answer) {
+                                case "c":
+                                    this.createCharacter();
+                                    break;
+                                case "o":
+                                    this.chooseSaveCharacter(allSaveHeroes);
+                                    break;
+                                default:
+                                    this.menu.sout("Veuillez saisir une réponse correcte");
+                                    break;
+                            }
+                        }
+                    } else {
+                        this.menu.sout("Il n'y a pas de héros sauvegardés, vous devez créer un nouveau héro !");
+                        this.createCharacter();
+                        break;
                     }
+
                     break;
                 case "c":
                     this.createCharacter();
