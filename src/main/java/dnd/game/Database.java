@@ -90,7 +90,6 @@ public class Database {
                     System.out.println(e);
                 }
 
-                assert hero != null;
                 hero.setName(name);
                 hero.setLife(life);
                 hero.setStrength(strength);
@@ -99,9 +98,13 @@ public class Database {
                 heroes.add(hero);
             }
 
+            statement.close();
+            result.close();
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
         if (heroes.size() == 0) {
             return null;
         } else {
