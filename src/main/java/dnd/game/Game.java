@@ -16,11 +16,12 @@ public class Game {
     public Game() {
         this.menu = new MenuTerminal();
         this.database = new Database();
-        this.dice = new ClassicDice(6);
-        //this.dice = new KnowDice();
-        this.board = new Board();
-//        this.hero = this.createCharacter();
+        //this.dice = new ClassicDice(6);
+        this.dice = new KnowDice();
+        //this.board = new ClassicBoard();
+        this.board = new KnowBoard();
         this.hero = this.chooseCharacter();
+        //this.hero = this.createCharacter();
         this.makeMenuchoice();
     }
 
@@ -231,7 +232,7 @@ public class Game {
             sameCharacter = this.menu.input();
             switch (sameCharacter) {
                 case "o":
-                    this.board = new Board();
+                    this.board = new ClassicBoard();
                     if (hero.getLife() <= 0) {
                         this.menu.sout("Désolé, votre personnage est mort ! Vous devez en créer un nouveau ou en choisir un sauvegardé !");
                         this.chooseCharacter();
@@ -242,7 +243,7 @@ public class Game {
                     break;
                 case "n":
                     this.chooseCharacter();
-                    this.board = new Board();
+                    this.board = new ClassicBoard();
                     this.makeMenuchoice();
                     break;
                 default:
