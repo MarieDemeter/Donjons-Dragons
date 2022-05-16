@@ -7,12 +7,13 @@ public abstract class Hero extends Character {
     private int maxLife;
     private int maxStrength;
     private Equipement equipement = null;
-    private int id;
+    private Long id;
 
     /**
      * Constructor of a character without parameters
      */
     public Hero() {
+        this.id = null;
     }
 
     /**
@@ -114,10 +115,10 @@ public abstract class Hero extends Character {
                 equipement + "\n\n";
     }
 
-    public void setId(int id) {this.id = id;
+    public void setId(Long id) {this.id = id;
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 }

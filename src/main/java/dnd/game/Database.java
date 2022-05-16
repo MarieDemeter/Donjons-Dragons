@@ -39,12 +39,41 @@ public class Database {
     }
 
     public void addHeroes(Hero hero) {
-
-        try (PreparedStatement preparedStatement = this.connection.prepareStatement("INSERT INTO Hero(Type, Name, Life, Strength, Equipement) VALUES(?, ?, ?, ?,?);")) {
+        //ResultSet heroId;
+        try (PreparedStatement preparedStatement = this.connection.prepareStatement("INSERT INTO Hero(Type, Name, Life, Strength, Equipement) VALUES(?, ?, ?, ?,?);", Statement.RETURN_GENERATED_KEYS)) {
             preparedStatement.setString(1, hero.getClass().getSimpleName());
             preparedStatement.setString(2, hero.getName());
             preparedStatement.setInt(3, hero.getLife());
             preparedStatement.setInt(4, hero.getStrength());
+
+            if (hero.getEquipement() != null) {
+                preparedStatement.setString(5, hero.getEquipement().getClass().getSimpleName());
+            } else {
+                preparedStatement.setString(5, "rien");
+            }
+            preparedStatement.executeUpdate();
+
+            try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    hero.setId(generatedKeys.getLong(1));
+                }
+                else {
+                    throw new SQLException("Creating user failed, no ID obtained.");
+                }
+            }
+            //heroId = preparedStatement.getGeneratedKeys();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void updateHero(Hero hero) {
+        try (PreparedStatement preparedStatement = this.connection.prepareStatement("UPDATE Hero SET Type = ?, Name = ?, Life = ?, Strength = ?, Equipement = ? WHERE Id = ?;")) {
+            preparedStatement.setString(1, hero.getClass().getSimpleName());
+            preparedStatement.setString(2, hero.getName());
+            preparedStatement.setInt(3, hero.getLife());
+            preparedStatement.setInt(4, hero.getStrength());
+            preparedStatement.setLong(6, hero.getId());
 
             if (hero.getEquipement() != null) {
                 preparedStatement.setString(5, hero.getEquipement().getClass().getSimpleName());
@@ -58,6 +87,7 @@ public class Database {
         }
     }
 
+
     public List<Hero> getHeroes() {
         List<Hero> heroes = new ArrayList<Hero>();
         Hero hero = null;
@@ -67,7 +97,7 @@ public class Database {
             ResultSet result = statement.executeQuery("SELECT * FROM Hero;");
 
             while (result.next()) {
-                int id = (int) result.getInt("Id");
+                Long id = result.getLong("Id");
                 String type = result.getString("Type");
                 String name = result.getString("Name");
                 int life = result.getInt("Life");
@@ -121,6 +151,5 @@ public class Database {
         } catch (SQLException ignore) {
         }
     }
-
 
 }

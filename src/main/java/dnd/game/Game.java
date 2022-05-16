@@ -188,7 +188,11 @@ public class Game {
                     while (!saveHero.equals("o") && !saveHero.equals("n")) {
                         saveHero = this.menu.input();
                         if ("o".equals(saveHero)) {
-                            this.getDatabase().addHeroes(this.getHero());
+                            if(hero.getId() != null){
+                                this.getDatabase().updateHero(this.hero);
+                            }else {
+                                this.getDatabase().addHeroes(hero);
+                            }
                             System.out.println("Votre héro a bien été sauvegardé !");
                         } else {
                             this.menu.sout("Votre héro n'a pas été sauvegardé !");
@@ -235,12 +239,11 @@ public class Game {
             sameCharacter = this.menu.input();
             switch (sameCharacter) {
                 case "o":
+                    this.board = new Board();
                     if (hero.getLife() <= 0) {
                         this.menu.sout("Désolé, votre personnage est mort ! Vous devez en créer un nouveau ou en choisir un sauvegardé !");
                         this.chooseCharacter();
-                        this.board = new Board();
                         this.makeMenuchoice();
-
                         break;
                     }
                     this.playGame();
@@ -264,142 +267,6 @@ public class Game {
         return nameOfCharacterChosen;
     }
 
-    public void startEvent(Hero hero, Cell playerCell) {
-        Event event = playerCell.getEvent();
-        if (event instanceof Enemy) {
-            eventFight(hero, (Enemy) event);
-        } else if (event instanceof Weapon && hero instanceof Warrior) {
-            eventWeapon(hero, (Weapon) event);
-        } else if (event instanceof Spell && hero instanceof Mage) {
-            eventSpell(hero, (Spell) event);
-
-        } else if (event instanceof Heal) {
-            eventHeal(hero, (Heal) event);
-
-        } else {
-            this.menu.sout("Dommage, ceci ne correspond pas à ton type de personnage !");
-        }
-
-    }
-
-    public void eventHeal(Hero hero, Heal event) {
-        String takeHeal = "";
-
-        while (!takeHeal.equals("o") && !takeHeal.equals("n")) {
-            this.menu.sout("Veux-tu prendre cette potion? (o ou n)");
-            takeHeal = this.menu.input();
-            switch (takeHeal) {
-                case "o":
-                    hero.setLife(Math.min(hero.getLife() + event.getHeal(), hero.getMaxLife()));
-                    this.menu.sout("Bravo, tu as maintenant " + hero.getLife() + " points de vie");
-                    /*
-                    if (hero.getLife()+heal.getHeal() < hero.getMaxLife()){
-                        hero.setLife(hero.getLife()+heal.getHeal());
-                    } else {
-                        hero.setLife(hero.getMaxLife());
-                    }*/
-                    break;
-                case "n":
-                    this.menu.sout("Tu passes ton chemin.");
-                    break;
-                default:
-                    this.menu.sout("Veuillez saisir une réponse correcte");
-                    break;
-            }
-        }
-    }
-
-    public void eventSpell(Hero hero, Spell event) {
-        String takeSpell = "";
-
-        if (hero.getEquipement() != null) {
-            this.menu.sout("Tu possède déjà le sort " + hero.getEquipement().getClass().getSimpleName());
-        } else {
-            this.menu.sout("Tu ne connais pas encore de sort !");
-        }
-
-        while (!takeSpell.equals("o") && !takeSpell.equals("n")) {
-            this.menu.sout("Veux-tu apprendre ce sort ? (o ou n)");
-            takeSpell = this.menu.input();
-            switch (takeSpell) {
-                case "o":
-                    hero.setEquipement(event);
-                    this.menu.sout("Bravo, tu as maintenant " + (hero.getStrength() + event.getStrength()) + " points de force");
-                    break;
-                case "n":
-                    this.menu.sout("Tu passes ton chemin.");
-                    break;
-                default:
-                    this.menu.sout("Veuillez saisir une réponse correcte");
-                    break;
-            }
-        }
-    }
-
-    public void eventWeapon(Hero hero, Weapon event) {
-        String takeWeapon = "";
-
-        if (hero.getEquipement() != null) {
-            this.menu.sout("Tu as déjà un(e) " + hero.getEquipement().getClass().getSimpleName() + " en main !");
-        } else {
-            this.menu.sout("Tu n'as pas encore d'arme en main !");
-        }
-
-        while (!takeWeapon.equals("o") && !takeWeapon.equals("n")) {
-            this.menu.sout("Veux-tu porter cette arme ? (o ou n)");
-            takeWeapon = this.menu.input();
-            switch (takeWeapon) {
-                case "o":
-                    hero.setEquipement(event);
-                    this.menu.sout("Bravo, tu as maintenant " + (hero.getStrength() + event.getStrength()) + " points de force");
-                    break;
-                case "n":
-                    this.menu.sout("Tu passes ton chemin.");
-                    break;
-                default:
-                    this.menu.sout("Veuillez saisir une réponse correcte");
-                    break;
-            }
-        }
-    }
-
-    public void eventFight(Hero hero, Enemy event) {
-        this.menu.sout(event.toString());
-
-        while (hero.getLife() > 0 || event.getLife() > 0) {
-            this.menu.sout("Vous attaquez l'ennemi");
-            Equipement equipement = hero.getEquipement();
-            int heroStrength = 0;
-            if (equipement != null) {
-                if (hero instanceof Warrior) {
-                    Weapon weapon = (Weapon) equipement;
-                    heroStrength = hero.getStrength() + weapon.getStrength();
-                } else {
-                    Spell spell = (Spell) equipement;
-                    heroStrength = hero.getStrength() + spell.getStrength();
-                }
-            } else {
-                heroStrength = hero.getStrength();
-            }
-            event.setLife(event.getLife() - heroStrength);
-            if (event.getLife() > 0) {
-                this.menu.sout("Vous avez infligé " + heroStrength + " de dégats à l'ennemi, il a maintenant " + event.getLife() + " points de vie");
-            } else {
-                this.menu.sout("Bravo vous venez de tuer le " + event.getClass().getSimpleName());
-                break;
-            }
-
-            this.menu.sout("Maintenant c'est au tour de l'ennemi");
-            hero.setLife(hero.getLife() - event.getStrength());
-            if (hero.getLife() > 0) {
-                this.menu.sout("L'ennemi vous a infligé " + event.getStrength() + " de dégats vous avez maintenant " + hero.getLife() + " points de vie");
-            } else {
-                this.menu.sout("Ho non, le " + event.getClass().getSimpleName() + " vous a tué !");
-                break;
-            }
-        }
-    }
-
     public Hero chooseCharacter() {
         this.menu.menuPrintorCreateCharacter();
         String input = "";
@@ -409,9 +276,9 @@ public class Game {
                 case "s":
                     List<Hero> allSaveHeroes = this.database.getHeroes();
                     if (allSaveHeroes != null){
-                        for (int i = 0; i < allSaveHeroes.size(); i++) {
-                            this.menu.sout("Héro n°" + i);
-                            this.menu.sout(allSaveHeroes.get(i).toString());
+                        for (int i = 1; i < allSaveHeroes.size(); i++) {
+                            this.menu.sout("Héro n°" + (i));
+                            this.menu.sout(allSaveHeroes.get(i-1).toString());
                         }
                         this.menu.sout("Taper c pour créer votre personnage ou o pour selectionner l'un des héros sauvegardés");
                         String answer = "";
@@ -457,8 +324,8 @@ public class Game {
         int numberChoosen = -1;
         while (numberChoosen < 0 || numberChoosen > heroes.size()) {
             numberChoosen = intInput.nextInt();
-            if (numberChoosen >= 0 && numberChoosen < heroes.size()) {
-                this.hero = heroes.get(numberChoosen);
+            if (numberChoosen > 0 && numberChoosen <= heroes.size()) {
+                this.hero = heroes.get(numberChoosen-1);
             } else {
                 this.menu.sout("Veuillez saisir une réponse correcte");
             }
