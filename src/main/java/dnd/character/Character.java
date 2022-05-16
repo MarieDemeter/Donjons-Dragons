@@ -1,11 +1,7 @@
 package dnd.character;
 
-import dnd.equipement.Equipement;
-
-import java.util.Scanner;
-
 public abstract class Character {
-    private char image = 'A';
+    private char image;
     private int life;
     private int strength;
 
@@ -13,6 +9,7 @@ public abstract class Character {
      * Constructor of a character without parameters
      */
     public Character() {
+        this.image = 'A';
     }
 
     /**

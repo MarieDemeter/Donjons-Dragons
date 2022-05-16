@@ -14,6 +14,4 @@ public class KnowDice implements Dice {
         System.out.println("Vous avez fait " + resultDice);
         return resultDice;
     }
-
-    ;
 }

@@ -7,10 +7,13 @@ import java.util.List;
 
 public class KnowBoard implements Board {
     //    private Cell[] board = new Cell[64];
-    private List<Cell> board = new ArrayList<Cell>();
-    private int numberOfCell = 11;
+    private List<Cell> board;
+    private int numberOfCell;
 
     public KnowBoard() {
+        this.board = new ArrayList<Cell>();
+        this.numberOfCell = 11;
+
         for (int i = 0; i < this.numberOfCell; i++) {
             //this.board[i] = new Cell(i);
             this.board.add(new KnowCell(i));

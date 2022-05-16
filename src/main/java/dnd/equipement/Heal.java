@@ -1,8 +1,6 @@
 package dnd.equipement;
 
 import dnd.character.Hero;
-import dnd.character.heros.Mage;
-import dnd.character.heros.Warrior;
 
 public class Heal extends Equipement{
     private int heal;

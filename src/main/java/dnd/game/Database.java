@@ -1,7 +1,6 @@
 package dnd.game;
 
 import dnd.character.Hero;
-import dnd.character.heros.Warrior;
 import dnd.equipement.Equipement;
 import dnd.equipement.Spell;
 import dnd.equipement.Weapon;

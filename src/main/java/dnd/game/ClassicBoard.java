@@ -7,10 +7,12 @@ import java.util.List;
 
 public class ClassicBoard implements Board {
     //    private Cell[] board = new Cell[64];
-    private List<ClassicCell> board = new ArrayList<ClassicCell>();
-    private int numberOfCell = 64;
+    private List<ClassicCell> board;
+    private int numberOfCell;
 
     public ClassicBoard() {
+        this.board = new ArrayList<ClassicCell>();
+        this.numberOfCell = 64;
         for (int i = 0; i < this.numberOfCell; i++) {
             //this.board[i] = new Cell(i);
             this.board.add(new ClassicCell(i));

@@ -1,10 +1,6 @@
 package dnd.equipement;
 
-import dnd.character.Hero;
-import dnd.character.heros.Mage;
-import dnd.character.heros.Warrior;
 import dnd.event.Event;
-
 import java.util.Scanner;
 
 public abstract class Equipement implements Event {

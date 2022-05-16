@@ -5,7 +5,7 @@ import dnd.event.Event;
 public interface Cell {
     
 
-    public Event selectTypeofEvent();
+    Event selectTypeofEvent();
     
     int getNumber();
 

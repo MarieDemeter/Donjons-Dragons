@@ -38,10 +38,4 @@ public class MenuTerminal implements Menu {
         this.sout("Pour quitter le jeu, taper q");
     }
 
-    public void menuChooseCharacter(){
-        this.sout("Pour voir les caractéristiques de votre héro, taper c");
-        this.sout("Pour voir les caractéristiques de votre héro, taper c");
-        this.sout("Pour quitter le jeu, taper q");
-    }
-
 }

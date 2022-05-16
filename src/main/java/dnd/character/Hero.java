@@ -40,24 +40,6 @@ public abstract class Hero extends Character {
     }
 
     /**
-     * Setter of maxlife (set the value of the maxlife of the character)
-     *
-     * @param maxLife the maxlife define by the defaults values of the character sheet
-     */
-    public void setMaxLife(int maxLife) {
-        this.maxLife = maxLife;
-    }
-
-    /**
-     * Getter of maxstrength (get the maxstrength of the character)
-     *
-     * @return The current maxstrength of the character
-     */
-    public int getMaxStrength() {
-        return maxStrength;
-    }
-
-    /**
      * Setter of maxstrength (set the value of the maxstrength of the character)
      *
      * @param maxStrength the max strength define by the defaults values of the character sheet
