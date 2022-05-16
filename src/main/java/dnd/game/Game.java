@@ -1,14 +1,6 @@
 package dnd.game;
 
-import dnd.character.Enemy;
 import dnd.character.Hero;
-import dnd.character.heros.Mage;
-import dnd.character.heros.Warrior;
-import dnd.equipement.Equipement;
-import dnd.equipement.Heal;
-import dnd.equipement.Spell;
-import dnd.equipement.Weapon;
-import dnd.event.Event;
 import dnd.exception.CharacterOutsideOfBoardException;
 
 import java.util.List;
@@ -301,7 +293,6 @@ public class Game {
                         this.createCharacter();
                         break;
                     }
-
                     break;
                 case "c":
                     this.createCharacter();
@@ -318,7 +309,6 @@ public class Game {
     }
 
     public void chooseSaveCharacter(List<Hero> heroes) {
-
         this.menu.sout("taper le numéro du héro que vous voulez jouer");
         Scanner intInput = new Scanner(System.in);
         int numberChoosen = -1;
