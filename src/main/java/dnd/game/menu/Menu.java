@@ -1,4 +1,4 @@
-package dnd.game;
+package dnd.game.menu;
 
 public interface Menu {
 

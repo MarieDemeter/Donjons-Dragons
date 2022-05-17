@@ -1,4 +1,4 @@
-package dnd.game;
+package dnd.game.cell;
 
 import dnd.character.enemies.Dragon;
 import dnd.character.enemies.Goblin;
@@ -10,8 +10,9 @@ import dnd.equipement.spell.Flash;
 import dnd.equipement.weapon.Club;
 import dnd.equipement.weapon.Sword;
 import dnd.event.Event;
+import dnd.game.cell.Cell;
 
-public class ClassicCell implements Cell{
+public class ClassicCell implements Cell {
     private int number;
     private Event event;
 

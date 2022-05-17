@@ -1,6 +1,8 @@
-package dnd.game;
+package dnd.game.board;
 
 import dnd.exception.CharacterOutsideOfBoardException;
+import dnd.game.cell.KnowCell;
+import dnd.game.cell.Cell;
 
 import java.util.ArrayList;
 import java.util.List;

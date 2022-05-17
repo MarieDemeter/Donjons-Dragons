@@ -2,6 +2,15 @@ package dnd.game;
 
 import dnd.character.Hero;
 import dnd.exception.CharacterOutsideOfBoardException;
+import dnd.game.board.Board;
+import dnd.game.board.ClassicBoard;
+import dnd.game.board.KnowBoard;
+import dnd.game.cell.Cell;
+import dnd.game.database.Database;
+import dnd.game.dice.Dice;
+import dnd.game.dice.KnowDice;
+import dnd.game.menu.Menu;
+import dnd.game.menu.MenuTerminal;
 
 import java.util.List;
 import java.util.Scanner;

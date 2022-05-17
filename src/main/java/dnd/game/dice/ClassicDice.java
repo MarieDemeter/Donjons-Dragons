@@ -1,6 +1,6 @@
-package dnd.game;
+package dnd.game.dice;
 
-public class ClassicDice implements Dice{
+public class ClassicDice implements Dice {
     private static int valueOfDice;
 
     public ClassicDice(int valueOfDice) {

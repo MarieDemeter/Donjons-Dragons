@@ -1,4 +1,6 @@
-package dnd.game;
+package dnd.game.dice;
+
+import dnd.game.dice.Dice;
 
 public class KnowDice implements Dice {
     private int numberTour;

@@ -1,4 +1,6 @@
-package dnd.game;
+package dnd.game.menu;
+
+import dnd.game.menu.Menu;
 
 import java.util.Scanner;
 

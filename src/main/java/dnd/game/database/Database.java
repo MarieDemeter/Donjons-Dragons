@@ -1,4 +1,4 @@
-package dnd.game;
+package dnd.game.database;
 
 import dnd.character.Hero;
 import dnd.equipement.Equipement;
