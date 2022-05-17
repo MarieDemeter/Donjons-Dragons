@@ -26,12 +26,9 @@ public class Database {
         //Chargement du driver
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
+            this.connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/DnD", "invite", "boolean");
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
-        }
-
-        try {
-            this.connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/DnD", "invite", "boolean");
         } catch (SQLException e) {
             e.printStackTrace();
         }
