@@ -12,13 +12,15 @@ import dnd.game.dice.KnowDice;
 import dnd.game.menu.Menu;
 import dnd.game.menu.MenuTerminal;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 public class Game {
     private Dice dice;
     private Board board;
-    private Hero hero;
+    //private Hero hero;
+    private List<Hero> heroes;
     private Database database;
     private Menu menu;
 
@@ -29,9 +31,9 @@ public class Game {
         this.dice = new KnowDice();
         //this.board = new ClassicBoard();
         this.board = new KnowBoard();
-        this.hero = this.chooseCharacter();
+        this.heroes = new ArrayList<Hero>();
+        this.chooseNumberOfPlayer();
         //this.hero = this.createCharacter();
-        this.makeMenuchoice();
     }
 
     public Dice getDice() {
@@ -48,14 +50,6 @@ public class Game {
 
     public void setBoard(Board board) {
         this.board = board;
-    }
-
-    public Hero getHero() {
-        return hero;
-    }
-
-    public void setHero(Hero hero) {
-        this.hero = hero;
     }
 
     public Database getDatabase() {
@@ -90,11 +84,10 @@ public class Game {
                     break;
                 case "c":
                     isItValid = "";
-                    this.menu.sout(this.getHero().toString());
+                    //this.menu.sout(this.getHero().toString());
                     break;
                 case "m":
                     this.createCharacter();
-                    this.setHero(this.hero);
                     isItValid = "";
                     break;
                 case "q":
@@ -144,7 +137,7 @@ public class Game {
             }*/
         }
         hero.setName(this.chooseName());
-        this.hero = hero;
+        this.heroes.add(hero);
     }
 
 
@@ -152,59 +145,62 @@ public class Game {
      * Start and play the game
      */
     public void playGame() {
-        this.menu.sout("Nous allons commencer, tu commences sur la case 1 :" + "\n");
-        String rollDice = "";
-        int playerPosition = 0;
+        int numberPlayers = heroes.size();
+        int numberPlayersDied = 0;
+        while (numberPlayersDied != numberPlayers) {
+            for (Hero hero : heroes) {
+                if (!hero.isDead()) {
+                    this.menu.sout("-----------" + hero.getName() + "\n");
+                    String rollDice = "";
+                    int playerPosition = hero.getPosition();
 
-        while (true) {
-            this.menu.sout("Appuyez sur une touche pour lancer le dé ou taper q pour quitter");
-            rollDice = this.menu.input();
 
-            if (rollDice.equals("q")) {
-                this.quitGame();
-            } else {
-                int valueOfDice = this.dice.rollDice();
-                playerPosition += valueOfDice;
-                try {
-                    Cell cellPosition = this.board.getCell(playerPosition);
-                    this.menu.sout("Vous êtes donc sur la case " + cellPosition.getNumber() + "\n");
+                    this.menu.sout("Appuyez sur une touche pour lancer le dé ou taper q pour quitter");
+                    rollDice = this.menu.input();
 
-                    if (cellPosition.getEvent() != null) {
-                        cellPosition.getEvent().trigger();
-                        cellPosition.getEvent().playEvent(hero);
-                        //this.startEvent(hero, cellPosition);
-                        if (this.hero.getLife() <= 0) {
-                            playAgain();
-                        }
-                    }
-                    /*if (playerPosition < this.board.getBoard().length) {
-                        this.menu.sout("Vous êtes donc sur la case " + playerPosition + "\n");
+                    if (rollDice.equals("q")) {
+                        this.quitGame();
                     } else {
-                        throw new CharacterOutsideOfBoard();
-                    }*/
-                } catch (CharacterOutsideOfBoardException e) {
-                    this.menu.sout(e.toString());
-                    this.menu.sout("Voulez-vous sauvegarder votre personnage ? (taper o pour save)");
-                    String saveHero = "";
+                        int valueOfDice = this.dice.rollDice();
+                        playerPosition += valueOfDice;
+                        hero.setPosition(playerPosition);
+                        try {
+                            Cell cellPosition = this.board.getCell(playerPosition);
+                            this.menu.sout("Vous êtes donc sur la case " + cellPosition.getNumber() + "\n");
 
-                    while (!saveHero.equals("o") && !saveHero.equals("n")) {
-                        saveHero = this.menu.input();
-                        if ("o".equals(saveHero)) {
-                            if(hero.getId() != null){
-                                this.getDatabase().updateHero(this.hero);
-                            }else {
-                                this.getDatabase().addHeroes(hero);
+                            if (cellPosition.getEvent() != null) {
+                                cellPosition.getEvent().trigger();
+                                cellPosition.getEvent().playEvent(hero);
+                                //this.startEvent(hero, cellPosition);
+                                if (hero.getLife() <= 0) {
+                                    hero.setDead(true);
+                                    numberPlayersDied++;
+                                }
                             }
-                            System.out.println("Votre héro a bien été sauvegardé !");
-                        } else {
-                            this.menu.sout("Votre héro n'a pas été sauvegardé !");
+                        } catch (CharacterOutsideOfBoardException e) {
+                            this.menu.sout(e.toString());
+                            this.menu.sout("Voulez-vous sauvegarder votre personnage ? (taper o pour save)");
+                            String saveHero = "";
+
+                            while (!saveHero.equals("o") && !saveHero.equals("n")) {
+                                saveHero = this.menu.input();
+                                if ("o".equals(saveHero)) {
+                                    if (hero.getId() != null) {
+                                        this.getDatabase().updateHero(hero);
+                                    } else {
+                                        this.getDatabase().addHeroes(hero);
+                                    }
+                                    System.out.println("Votre héro a bien été sauvegardé !");
+                                } else {
+                                    this.menu.sout("Votre héro n'a pas été sauvegardé !");
+                                }
+                            }
                         }
                     }
-                    break;
                 }
             }
         }
-        this.playAgain();
+
     }
 
     /**
@@ -241,19 +237,21 @@ public class Game {
             sameCharacter = this.menu.input();
             switch (sameCharacter) {
                 case "o":
-                    this.board = new ClassicBoard();
+                    this.board = new ClassicBoard();/*
                     if (hero.getLife() <= 0) {
                         this.menu.sout("Désolé, votre personnage est mort ! Vous devez en créer un nouveau ou en choisir un sauvegardé !");
                         this.chooseCharacter();
-                        this.makeMenuchoice();
+//                        this.makeMenuchoice();
+
                         break;
-                    }
+                    }*/
                     this.playGame();
                     break;
                 case "n":
                     this.chooseCharacter();
                     this.board = new ClassicBoard();
-                    this.makeMenuchoice();
+                    this.chooseNumberOfPlayer();
+                    // this.makeMenuchoice();
                     break;
                 default:
                     this.menu.sout("Veuillez saisir une réponse correcte");
@@ -269,7 +267,8 @@ public class Game {
         return nameOfCharacterChosen;
     }
 
-    public Hero chooseCharacter() {
+    public void chooseCharacter() {
+
         this.menu.menuPrintorCreateCharacter();
         String input = "";
         while (!input.equals("s") && !input.equals("c") && !input.equals("q")) {
@@ -277,10 +276,10 @@ public class Game {
             switch (input) {
                 case "s":
                     List<Hero> allSaveHeroes = this.database.getHeroes();
-                    if (allSaveHeroes != null){
+                    if (allSaveHeroes != null) {
                         for (int i = 1; i < allSaveHeroes.size(); i++) {
                             this.menu.sout("Héro n°" + (i));
-                            this.menu.sout(allSaveHeroes.get(i-1).toString());
+                            this.menu.sout(allSaveHeroes.get(i - 1).toString());
                         }
                         this.menu.sout("Taper c pour créer votre personnage ou o pour selectionner l'un des héros sauvegardés");
                         String answer = "";
@@ -315,7 +314,22 @@ public class Game {
                     break;
             }
         }
-        return this.hero;
+    }
+
+    private void chooseNumberOfPlayer() {
+        int numberOfPlayer = 0;
+
+        while (numberOfPlayer <= 0) {
+            this.menu.sout("Combien de personnes vont jouer ? ");
+            Scanner intInput = new Scanner(System.in);
+            numberOfPlayer = intInput.nextInt();
+        }
+
+        for (int i = 0; i < numberOfPlayer; i++) {
+            this.menu.sout(" ------------------ Joueur n°" + (i + 1) + " :");
+            this.chooseCharacter();
+        }
+        this.playGame();
     }
 
     public void chooseSaveCharacter(List<Hero> heroes) {
@@ -325,7 +339,7 @@ public class Game {
         while (numberChoosen < 0 || numberChoosen > heroes.size()) {
             numberChoosen = intInput.nextInt();
             if (numberChoosen > 0 && numberChoosen <= heroes.size()) {
-                this.hero = heroes.get(numberChoosen-1);
+                this.heroes.add(heroes.get(numberChoosen - 1));
             } else {
                 this.menu.sout("Veuillez saisir une réponse correcte");
             }

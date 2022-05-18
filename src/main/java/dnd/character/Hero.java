@@ -8,12 +8,32 @@ public abstract class Hero extends Character {
     private int maxStrength;
     private Equipement equipement = null;
     private Long id;
+    private int position;
+    private boolean isDead;
 
     /**
      * Constructor of a character without parameters
      */
     public Hero() {
         this.id = null;
+        this.position = 0;
+        this.isDead = false;
+    }
+
+    public boolean isDead() {
+        return isDead;
+    }
+
+    public void setDead(boolean dead) {
+        isDead = dead;
+    }
+
+    public int getPosition() {
+        return position;
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
     }
 
     /**
@@ -85,7 +105,7 @@ public abstract class Hero extends Character {
     @Override
     public String toString() {
         String equipement = "";
-        if (this.getEquipement() != null){
+        if (this.getEquipement() != null) {
             equipement = "Il possède un(e) " + this.getEquipement().getName();
         } else {
             equipement = "Il ne possède pas d'équipement";
@@ -97,7 +117,8 @@ public abstract class Hero extends Character {
                 equipement + "\n\n";
     }
 
-    public void setId(Long id) {this.id = id;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public Long getId() {

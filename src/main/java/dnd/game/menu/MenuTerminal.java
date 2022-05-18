@@ -14,7 +14,7 @@ public class MenuTerminal implements Menu {
      *
      */
     public void printMenu() {
-        this.sout("Pour commencer à jouer, taper o");
+        this.sout("Prêt ?, taper o");
         this.sout("Pour changer votre héro, taper m");
         this.sout("Pour voir les caractéristiques de votre héro, taper c");
         this.sout("Pour quitter le jeu, taper q");

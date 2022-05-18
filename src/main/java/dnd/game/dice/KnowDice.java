@@ -10,9 +10,12 @@ public class KnowDice implements Dice {
     }
 
     public int rollDice() {
+        /*
         int[] dice = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
         int resultDice = dice[this.numberTour];
         this.numberTour++;
+        */
+        int resultDice = 1;
         System.out.println("Vous avez fait " + resultDice);
         return resultDice;
     }
