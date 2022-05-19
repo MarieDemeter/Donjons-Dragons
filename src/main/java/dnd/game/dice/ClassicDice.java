@@ -3,6 +3,10 @@ package dnd.game.dice;
 public class ClassicDice implements Dice {
     private static int valueOfDice;
 
+    public ClassicDice() {
+        this(6);
+    }
+
     public ClassicDice(int valueOfDice) {
         this.valueOfDice = valueOfDice;
     }

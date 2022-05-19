@@ -7,6 +7,7 @@ import dnd.game.board.ClassicBoard;
 import dnd.game.board.KnowBoard;
 import dnd.game.cell.Cell;
 import dnd.game.database.Database;
+import dnd.game.dice.ClassicDice;
 import dnd.game.dice.Dice;
 import dnd.game.dice.KnowDice;
 import dnd.game.menu.Menu;
@@ -22,15 +23,28 @@ public class Game {
     private Database database;
     private Menu menu;
 
-    public Game() {
+    public Game(String[] args) {
         this.menu = new MenuTerminal();
         this.database = new Database();
-        //this.dice = new ClassicDice(6);
-        this.dice = new KnowDice();
-        //this.board = new ClassicBoard();
-        this.board = new KnowBoard();
+        if (args.length != 0) {
+            for (String arg : args) {
+                try {
+                    Class<?> typeClass = Class.forName("dnd.game.dice." + arg);
+                    this.dice = (Dice) typeClass.getDeclaredConstructor().newInstance();
+                    if (this.dice instanceof KnowDice) {
+                        this.board = new KnowBoard();
+                    } else {
+                        this.board = new ClassicBoard();
+                    }
+                } catch (Exception e) {
+                    //
+                }
+            }
+        } else {
+            this.dice = new ClassicDice(6);
+            this.board = new ClassicBoard();
+        }
         this.hero = this.chooseCharacter();
-        //this.hero = this.createCharacter();
         this.makeMenuchoice();
     }
 
@@ -72,7 +86,7 @@ public class Game {
      * @param args String[]
      */
     public static void main(String[] args) {
-        new Game();
+        new Game(args);
     }
 
     /**
@@ -190,9 +204,9 @@ public class Game {
                     while (!saveHero.equals("o") && !saveHero.equals("n")) {
                         saveHero = this.menu.input();
                         if ("o".equals(saveHero)) {
-                            if(hero.getId() != null){
+                            if (hero.getId() != null) {
                                 this.getDatabase().updateHero(this.hero);
-                            }else {
+                            } else {
                                 this.getDatabase().addHeroes(hero);
                             }
                             System.out.println("Votre héro a bien été sauvegardé !");
@@ -277,10 +291,10 @@ public class Game {
             switch (input) {
                 case "s":
                     List<Hero> allSaveHeroes = this.database.getHeroes();
-                    if (allSaveHeroes != null){
+                    if (allSaveHeroes != null) {
                         for (int i = 1; i < allSaveHeroes.size(); i++) {
                             this.menu.sout("Héro n°" + (i));
-                            this.menu.sout(allSaveHeroes.get(i-1).toString());
+                            this.menu.sout(allSaveHeroes.get(i - 1).toString());
                         }
                         this.menu.sout("Taper c pour créer votre personnage ou o pour selectionner l'un des héros sauvegardés");
                         String answer = "";
@@ -325,7 +339,7 @@ public class Game {
         while (numberChoosen < 0 || numberChoosen > heroes.size()) {
             numberChoosen = intInput.nextInt();
             if (numberChoosen > 0 && numberChoosen <= heroes.size()) {
-                this.hero = heroes.get(numberChoosen-1);
+                this.hero = heroes.get(numberChoosen - 1);
             } else {
                 this.menu.sout("Veuillez saisir une réponse correcte");
             }
